@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fastener Selector</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #181818;
+    --surface2: #222222;
+    --surface3: #2a2a2a;
+    --border: #333333;
+    --border2: #444444;
+    --text: #e8e6e0;
+    --text2: #9a9690;
+    --text3: #5a5854;
+    --accent: #c8a96e;
+    --accent2: #8fba6a;
+    --accent3: #6aaaba;
+    --danger: #c06060;
+    --tag-active-bg: #c8a96e18;
+    --tag-active-border: #c8a96e66;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .shell {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+  }
+
+  header {
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  header h1 {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  header span {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+
+  .filter-section {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .filter-section:last-child { border-bottom: none; }
+
+  .filter-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.12s ease;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .tag:hover {
+    border-color: var(--border2);
+    color: var(--text);
+  }
+
+  .tag.active {
+    background: var(--tag-active-bg);
+    border-color: var(--tag-active-border);
+    color: var(--accent);
+  }
+
+  .reset-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 8px;
+    letter-spacing: 0.06em;
+    transition: color 0.12s;
+  }
+  .reset-btn:hover { color: var(--danger); }
+
+  /* ── Main panel ── */
+  .main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .results-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .results-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  .results-count strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .no-results {
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  /* ── Cards ── */
+  .cards {
+    padding: 20px 24px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+    align-content: start;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+
+  .card:hover {
+    border-color: var(--border2);
+    background: var(--surface2);
+  }
+
+  .card.expanded {
+    border-color: var(--accent);
+    background: var(--surface2);
+    grid-column: 1 / -1;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .card-grade {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--tag-active-bg);
+    border: 1px solid var(--tag-active-border);
+    border-radius: 3px;
+    padding: 2px 7px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .card-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--text3);
+  }
+
+  .pill.env   { border-color: #6aaaba44; color: var(--accent3); }
+  .pill.str   { border-color: #c8a96e44; color: var(--accent); }
+  .pill.mat   { border-color: #8fba6a44; color: var(--accent2); }
+  .pill.wt    { border-color: #aa6aba44; color: #aa6aba; }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .expand-hint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Expanded card details ── */
+  .card-details {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  .card.expanded .card-details { display: grid; }
+
+  .detail-group h4 {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .detail-group ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .detail-group li {
+    font-size: 12px;
+    color: var(--text2);
+    padding-left: 12px;
+    position: relative;
+  }
+
+  .detail-group li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--text3);
+    font-size: 10px;
+  }
+
+  /* ── Torque section ── */
+  .torque-section {
+    margin-top: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .torque-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .torque-header h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .torque-header .chevron {
+    font-size: 10px;
+    color: var(--text3);
+    transition: transform 0.2s;
+  }
+
+  .torque-header.open .chevron { transform: rotate(180deg); }
+
+  .torque-body {
+    display: none;
+    padding: 20px 18px;
+  }
+  .torque-body.open { display: block; }
+
+  .torque-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .torque-field label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .torque-field select,
+  .torque-field input {
+    width: 100%;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 7px 10px;
+    outline: none;
+    transition: border-color 0.12s;
+    appearance: none;
+  }
+
+  .torque-field select:focus,
+  .torque-field input:focus {
+    border-color: var(--accent);
+  }
+
+  .torque-result {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .torque-result .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .torque-result .value {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .torque-result .note {
+    font-size: 11px;
+    color: var(--text3);
+    margin-left: auto;
+  }
+
+  /* ── Checklist section ── */
+  .checklist-section {
+    margin-top: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .checklist-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .checklist-header h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .checklist-body {
+    display: none;
+    padding: 20px 18px;
+  }
+  .checklist-body.open { display: block; }
+
+  .checklist-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .checklist-group h4 {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .check-item input[type=checkbox] {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    background: var(--surface3);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.12s;
+    position: relative;
+  }
+
+  .check-item input[type=checkbox]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .check-item input[type=checkbox]:checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 1px;
+    width: 5px;
+    height: 8px;
+    border: 1.5px solid #0f0f0f;
+    border-left: none;
+    border-top: none;
+    transform: rotate(45deg);
+  }
+
+  .check-item span {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .check-item.done span {
+    color: var(--text3);
+    text-decoration: line-through;
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--surface3);
+    border-radius: 1px;
+    margin-top: 16px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent2);
+    border-radius: 1px;
+    transition: width 0.3s ease;
+  }
+
+  .progress-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 6px;
+  }
+
+  /* ── Active filter indicator ── */
+  .active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .active-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: var(--tag-active-bg);
+    border: 1px solid var(--tag-active-border);
+    color: var(--accent);
+  }
+
+  .no-filters {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  @media (max-width: 700px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+    .card-details { grid-template-columns: 1fr; }
+    .torque-grid { grid-template-columns: 1fr 1fr; }
+    .checklist-cols { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Header -->
+  <header>
+    <h1>Fastener Selector</h1>
+    <span>Filter to narrow · click card to expand</span>
+  </header>
+
+  <!-- Sidebar filters -->
+  <aside class="sidebar">
+
+    <div class="filter-section">
+      <div class="filter-label">Joint materials</div>
+      <div class="tags" id="filter-material">
+        <div class="tag" data-filter="material" data-val="steel-steel">Steel–steel</div>
+        <div class="tag" data-filter="material" data-val="stainless-stainless">Stainless–stainless</div>
+        <div class="tag" data-filter="material" data-val="aluminum">Aluminum involved</div>
+        <div class="tag" data-filter="material" data-val="plastic">Plastic / composite</div>
+        <div class="tag" data-filter="material" data-val="mixed">Mixed metals</div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Environment</div>
+      <div class="tags" id="filter-env">
+        <div class="tag" data-filter="env" data-val="indoor">Indoor / dry</div>
+        <div class="tag" data-filter="env" data-val="outdoor">Outdoor / wet</div>
+        <div class="tag" data-filter="env" data-val="marine">Marine / chemical</div>
+        <div class="tag" data-filter="env" data-val="washdown">Washdown</div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Priority</div>
+      <div class="tags" id="filter-priority">
+        <div class="tag" data-filter="priority" data-val="strength">High strength</div>
+        <div class="tag" data-filter="priority" data-val="corrosion">Corrosion resistance</div>
+        <div class="tag" data-filter="priority" data-val="weight">Low weight</div>
+        <div class="tag" data-filter="priority" data-val="cost">Low cost</div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Duty</div>
+      <div class="tags" id="filter-duty">
+        <div class="tag" data-filter="duty" data-val="general">General</div>
+        <div class="tag" data-filter="duty" data-val="high-strength">High strength</div>
+        <div class="tag" data-filter="duty" data-val="corrosion-critical">Corrosion-critical</div>
+      </div>
+    </div>
+
+    <div style="padding: 0 20px;">
+      <button class="reset-btn" onclick="resetAll()">✕ clear all filters</button>
+    </div>
+
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <div class="results-header">
+      <div class="active-filters" id="active-filters">
+        <span class="no-filters">No filters active — showing all options</span>
+      </div>
+      <div class="results-count"><strong id="count">0</strong> results</div>
+    </div>
+
+    <div class="cards" id="cards"></div>
+
+    <!-- Torque lookup -->
+    <div style="padding: 0 24px;">
+    <div class="torque-section">
+      <div class="torque-header" id="torque-toggle" onclick="toggleSection('torque')">
+        <h3>Torque reference</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="torque-body" id="torque-body">
+        <div class="torque-grid">
+          <div class="torque-field">
+            <label>Material / grade</label>
+            <select id="tq-grade" onchange="calcTorque()">
+              <option value="">— select —</option>
+              <option value="cs5">Carbon steel Grade 5</option>
+              <option value="cs8">Carbon steel Grade 8</option>
+              <option value="as-b7">Alloy steel B7 stud</option>
+              <option value="ss304-a270">304 SS A2-70</option>
+              <option value="ss316-a480">316 SS A4-80</option>
+              <option value="al">Aluminum 2024</option>
+              <option value="ti">Titanium Grade 5</option>
+            </select>
+          </div>
+          <div class="torque-field">
+            <label>Diameter</label>
+            <select id="tq-size" onchange="calcTorque()">
+              <option value="">— select —</option>
+              <option value="m6">M6</option>
+              <option value="m8">M8</option>
+              <option value="m10">M10</option>
+              <option value="m12">M12</option>
+              <option value="m16">M16</option>
+              <option value="3/8">3/8"</option>
+              <option value="1/2">1/2"</option>
+              <option value="5/8">5/8"</option>
+              <option value="3/4">3/4"</option>
+            </select>
+          </div>
+          <div class="torque-field">
+            <label>Condition</label>
+            <select id="tq-lube" onchange="calcTorque()">
+              <option value="dry">Dry (K≈0.20)</option>
+              <option value="oiled">Lightly oiled (K≈0.17)</option>
+              <option value="antiseize">Anti-seize (K≈0.13)</option>
+              <option value="ptfe">PTFE lube (K≈0.12)</option>
+            </select>
+          </div>
+        </div>
+        <div class="torque-result" id="torque-result">
+          <span class="label">Torque</span>
+          <span class="value" id="torque-val">—</span>
+          <span class="note" id="torque-note">Select grade, diameter, and condition</span>
+        </div>
+        <p style="margin-top:10px;font-size:11px;color:var(--text3);line-height:1.6;">
+          Calculated from T = K·d·F (nut factor method). Values are nominal — verify against fastener manufacturer data for safety-critical joints. Torque changes ±15–25% with coating type and surface condition.
+        </p>
+      </div>
+    </div>
+
+    <!-- Documentation checklist -->
+    <div class="checklist-section">
+      <div class="checklist-header" id="checklist-toggle" onclick="toggleSection('checklist')">
+        <h3>Documentation checklist</h3>
+        <span class="chevron" id="checklist-chevron">▼</span>
+      </div>
+      <div class="checklist-body" id="checklist-body">
+        <div class="checklist-cols">
+          <div>
+            <div class="checklist-group">
+              <h4>Identity</h4>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Fastener type (bolt, screw, stud, nut…)</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Standard / specification (ASTM, ISO, SAE)</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Part number or manufacturer ref</span></label>
+            </div>
+            <br>
+            <div class="checklist-group">
+              <h4>Material & finish</h4>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Base material and grade</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Coating / plating specified</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Lubricant or anti-seize at installation</span></label>
+            </div>
+            <br>
+            <div class="checklist-group">
+              <h4>Geometry</h4>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Nominal diameter and thread pitch</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Length under head</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Drive type and head style</span></label>
+            </div>
+          </div>
+          <div>
+            <div class="checklist-group">
+              <h4>Strength</h4>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Grade / property class recorded</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Min. tensile and proof load (if joint analysis done)</span></label>
+            </div>
+            <br>
+            <div class="checklist-group">
+              <h4>Installation</h4>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Required torque (noting lube condition)</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Torque sequence / re-torque requirement</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Thread-locking compound grade (if required)</span></label>
+            </div>
+            <br>
+            <div class="checklist-group">
+              <h4>Joint context & rationale</h4>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Mating material(s) and isolation hardware</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Hole prep: clearance, countersink, thread engagement</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateProgress()"><span>Reason this fastener was chosen over alternatives</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        <div class="progress-label" id="progress-label">0 of 17 items complete</div>
+      </div>
+    </div>
+    </div>
+    <div style="height:24px;"></div>
+
+  </main>
+</div>
+
+<script>
+// ─── Data ───────────────────────────────────────────────────────────────────
+const FASTENERS = [
+  {
+    id: 'cs-standard',
+    title: 'Carbon steel — standard grade',
+    grade: 'SAE Grade 5 / ISO 8.8',
+    materials: ['steel-steel'],
+    envs: ['indoor'],
+    priorities: ['cost'],
+    duties: ['general'],
+    desc: 'Workhorse fastener for general structural assemblies in dry, indoor environments. Lowest cost per unit. Requires coating or plating for any outdoor or humid exposure.',
+    details: {
+      'Specifications': ['SAE J429 Grade 5', 'ISO 898-1 Class 8.8', 'ASTM A307 (lower duty)'],
+      'Typical coatings': ['Zinc electroplate (indoor)', 'Black oxide + oil (indoor)', 'Mechanical zinc for mild outdoor'],
+      'Watch out for': ['Hydrogen embrittlement risk above Grade 8', 'Not suitable for outdoor without coating', 'Galvanic risk against aluminum or stainless'],
+    }
+  },
+  {
+    id: 'alloy-highstr',
+    title: 'Alloy steel — high strength',
+    grade: 'SAE Grade 8 / ISO 10.9',
+    materials: ['steel-steel'],
+    envs: ['indoor', 'outdoor'],
+    priorities: ['strength', 'cost'],
+    duties: ['high-strength'],
+    desc: 'For high-load structural joints where clamp force and fatigue resistance are critical. Requires corrosion management via coating or controlled environment.',
+    details: {
+      'Specifications': ['SAE J429 Grade 8', 'ISO 898-1 Class 10.9', 'ASTM A354 Grade BD'],
+      'Typical coatings': ['Hot-dip galvanize (outdoor)', 'Zinc-nickel (corrosion + strength)', 'Phosphate + oil (moderate environments)'],
+      'Watch out for': ['Stress corrosion cracking in high-strength + corrosive', 'Re-use limits after initial torquing', 'Match nut grade to bolt grade'],
+    }
+  },
+  {
+    id: 'alloy-b7',
+    title: 'Alloy steel stud — B7',
+    grade: 'ASTM A193 B7',
+    materials: ['steel-steel'],
+    envs: ['indoor', 'outdoor'],
+    priorities: ['strength'],
+    duties: ['high-strength', 'corrosion-critical'],
+    desc: 'Standard for pressure vessels, flanges, and high-temperature applications. Chromium-molybdenum alloy with excellent elevated-temperature strength.',
+    details: {
+      'Specifications': ['ASTM A193 B7', 'Paired with ASTM A194 2H nuts', 'ASME B18.31.2 for stud dimensions'],
+      'Typical coatings': ['Hot-dip galvanize', 'Xylan or PTFE for galling prevention', 'Bare for high-temp service'],
+      'Watch out for': ['Torque carefully — high K-factor sensitivity', 'NACE MR0175 compliance for sour service', 'Temperature derating above 370°C'],
+    }
+  },
+  {
+    id: 'ss304-gen',
+    title: '304 stainless steel',
+    grade: 'A2-70',
+    materials: ['stainless-stainless', 'plastic', 'aluminum'],
+    envs: ['outdoor', 'indoor'],
+    priorities: ['corrosion', 'cost'],
+    duties: ['general', 'corrosion-critical'],
+    desc: 'Most common stainless fastener. Good corrosion resistance for outdoor, food-adjacent, and light industrial use. Avoid in chloride-heavy or marine environments.',
+    details: {
+      'Specifications': ['ISO 3506 A2-70', 'ASTM F593 Group 1 (304)', 'A2-80 for higher strength'],
+      'Typical coatings': ['None (passivated)', 'PTFE / Xylan for galling prevention'],
+      'Watch out for': ['Galling during installation — use wax or anti-seize', 'Pitting in chloride environments', 'Lower strength than alloy steel — check preload'],
+    }
+  },
+  {
+    id: 'ss316-marine',
+    title: '316 stainless steel — marine',
+    grade: 'A4-70 / A4-80',
+    materials: ['stainless-stainless', 'plastic', 'aluminum', 'mixed'],
+    envs: ['marine', 'washdown', 'outdoor'],
+    priorities: ['corrosion'],
+    duties: ['general', 'corrosion-critical'],
+    desc: 'Molybdenum addition gives superior chloride and pitting resistance. Preferred for marine, food processing, chemical, and washdown environments.',
+    details: {
+      'Specifications': ['ISO 3506 A4-70 / A4-80', 'ASTM F593 Group 2 (316)', 'ASTM A276 for bar stock'],
+      'Typical coatings': ['None (passivated)', 'PTFE for galling in large diameters'],
+      'Watch out for': ['Still susceptible to crevice corrosion in stagnant seawater', 'Galling risk — always lubricate installation', 'Do not mix 304 and 316 hardware in same joint'],
+    }
+  },
+  {
+    id: 'ss-duplex',
+    title: 'Duplex stainless (2205)',
+    grade: 'A5 / Custom',
+    materials: ['stainless-stainless', 'mixed'],
+    envs: ['marine', 'washdown'],
+    priorities: ['strength', 'corrosion'],
+    duties: ['high-strength', 'corrosion-critical'],
+    desc: 'Two-phase microstructure delivers ~2× the strength of 316 with superior chloride resistance. Used in offshore, subsea, and aggressive chemical environments.',
+    details: {
+      'Specifications': ['ASTM A276 UNS S32205', 'EN 1.4462', 'Paired with matching duplex nuts'],
+      'Typical coatings': ['None (passivated)', 'Inert barrier coatings for insulation'],
+      'Watch out for': ['Specialized procurement — longer lead times', 'Welding requires controlled heat input', 'Verify PREN ≥ 35 for seawater service'],
+    }
+  },
+  {
+    id: 'ss-specialty',
+    title: 'Specialty alloy (Inconel / Hastelloy)',
+    grade: 'Custom spec',
+    materials: ['mixed', 'stainless-stainless'],
+    envs: ['marine', 'washdown'],
+    priorities: ['corrosion', 'strength'],
+    duties: ['corrosion-critical'],
+    desc: 'Nickel superalloys for extreme chemical, high-temperature, or highly corrosive environments where standard stainless is inadequate.',
+    details: {
+      'Specifications': ['Inconel 625: ASTM B446', 'Hastelloy C276: ASTM B574', 'Custom threading per application'],
+      'Typical coatings': ['None required', 'Dry-film lube for galling prevention'],
+      'Watch out for': ['Very high cost — justify with life-cycle analysis', 'Custom procurement only', 'Machining and installation require care'],
+    }
+  },
+  {
+    id: 'al-fastener',
+    title: 'Aluminum fastener',
+    grade: '2024-T4 / 7075',
+    materials: ['aluminum'],
+    envs: ['indoor', 'outdoor'],
+    priorities: ['weight', 'cost'],
+    duties: ['general'],
+    desc: 'Minimum weight for aerospace, motorsport, and lightweight structures. Use only in aluminum-to-aluminum joints to avoid galvanic corrosion. Avoid high-load applications.',
+    details: {
+      'Specifications': ['2024-T4: ASTM B211', '7075-T73: higher strength option', 'NAS or AN hardware for aerospace'],
+      'Typical coatings': ['Anodized (Type II or III)', 'Alodine / chromate conversion', 'Bare 7075 for non-critical indoor'],
+      'Watch out for': ['Low shear strength vs. steel — verify margins', 'Galvanic corrosion if used with steel', 'Torque very carefully — strip threads easily'],
+    }
+  },
+  {
+    id: 'titanium',
+    title: 'Titanium Grade 5 (Ti-6Al-4V)',
+    grade: 'Grade 5 / AMS 4928',
+    materials: ['aluminum', 'mixed', 'stainless-stainless'],
+    envs: ['marine', 'outdoor', 'indoor'],
+    priorities: ['weight', 'corrosion', 'strength'],
+    duties: ['high-strength', 'corrosion-critical'],
+    desc: 'Best strength-to-weight ratio of any fastener metal with excellent corrosion resistance. Premium cost justified in aerospace, medical, and high-performance marine applications.',
+    details: {
+      'Specifications': ['AMS 4928 (aerospace)', 'ASTM B265 (sheet/strip basis)', 'Custom thread forms available'],
+      'Typical coatings': ['None (naturally passive)', 'Dry-film PTFE for installation galling'],
+      'Watch out for': ['Significant galling risk — always use lubricant', 'Not magnetic — verify with MWD/inspection tools', 'Verify grade: CP Ti is much weaker than Ti-6Al-4V'],
+    }
+  },
+  {
+    id: 'plastic-ss',
+    title: '316 SS in plastic / composite joint',
+    grade: 'A4-70',
+    materials: ['plastic'],
+    envs: ['indoor', 'outdoor', 'washdown'],
+    priorities: ['corrosion', 'cost'],
+    duties: ['general'],
+    desc: 'Stainless with large bearing area washers for plastic and composite substrates. Low galling risk and broad corrosion resistance without galvanic risk to substrate.',
+    details: {
+      'Specifications': ['ISO 3506 A4-70', 'Use large-OD or fender washers to distribute load', 'EPDM or neoprene bonded washers for sealing'],
+      'Typical coatings': ['Passivated', 'PTFE-coated for aggressive environments'],
+      'Watch out for': ['Torque carefully — composites creep under clamp load', 'Re-torque after initial thermal cycle', 'Thread insert (Helicoil) in plastic improves pullout'],
+    }
+  },
+  {
+    id: 'isolated-mixed',
+    title: 'Isolated fastener — mixed metal joint',
+    grade: 'Per material selected',
+    materials: ['mixed'],
+    envs: ['indoor', 'outdoor', 'marine', 'washdown'],
+    priorities: ['corrosion'],
+    duties: ['general', 'corrosion-critical'],
+    desc: 'When dissimilar metals must be joined, use isolation bushings, sleeves, and washers to break the galvanic cell. Fastener grade selected per joint loads independently.',
+    details: {
+      'Specifications': ['ASTM B117 salt spray qualification for isolator materials', 'Nylon, PTFE, or anodized aluminum isolators', 'Consult galvanic series — larger area difference = higher risk'],
+      'Typical coatings': ['Fastener: passivated stainless or zinc-nickel coated steel', 'Isolator: nylon or PTFE sleeve + washer'],
+      'Watch out for': ['Isolator must prevent all metal-to-metal contact', 'Check isolator creep / compression under clamp load', 'Periodic inspection — isolators degrade over time'],
+    }
+  },
+];
+
+// ─── State ───────────────────────────────────────────────────────────────────
+const active = { material: null, env: null, priority: null, duty: null };
+let expandedId = null;
+
+// ─── Filtering ───────────────────────────────────────────────────────────────
+function matches(f) {
+  if (active.material && !f.materials.includes(active.material)) return false;
+  if (active.env      && !f.envs.includes(active.env))           return false;
+  if (active.priority && !f.priorities.includes(active.priority)) return false;
+  if (active.duty     && !f.duties.includes(active.duty))         return false;
+  return true;
+}
+
+function render() {
+  const results = FASTENERS.filter(matches);
+  document.getElementById('count').textContent = results.length;
+
+  // Active filter chips
+  const af = document.getElementById('active-filters');
+  const chips = Object.entries(active).filter(([,v]) => v);
+  if (chips.length === 0) {
+    af.innerHTML = '<span class="no-filters">No filters active — showing all options</span>';
+  } else {
+    af.innerHTML = chips.map(([k, v]) =>
+      `<span class="active-chip">${v}</span>`
+    ).join('');
+  }
+
+  // Cards
+  const container = document.getElementById('cards');
+  if (results.length === 0) {
+    container.innerHTML = '<div class="no-results">No fasteners match all active filters.<br>Try removing one filter.</div>';
+    return;
+  }
+
+  container.innerHTML = results.map(f => {
+    const isExpanded = expandedId === f.id;
+    const detailHtml = Object.entries(f.details).map(([title, items]) => `
+      <div class="detail-group">
+        <h4>${title}</h4>
+        <ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>
+    `).join('');
+
+    return `
+      <div class="card${isExpanded ? ' expanded' : ''}" onclick="toggleCard('${f.id}')">
+        <div class="card-top">
+          <div class="card-title">${f.title}</div>
+          <div class="card-grade">${f.grade}</div>
+        </div>
+        <div class="card-pills">
+          ${f.envs.map(e => `<span class="pill env">${e}</span>`).join('')}
+          ${f.priorities.map(p => `<span class="pill str">${p}</span>`).join('')}
+          ${f.duties.map(d => `<span class="pill mat">${d}</span>`).join('')}
+        </div>
+        <div class="card-desc">${f.desc}</div>
+        <div class="expand-hint">${isExpanded ? '▲ collapse' : '▼ expand details'}</div>
+        <div class="card-details">
+          ${detailHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleCard(id) {
+  expandedId = expandedId === id ? null : id;
+  render();
+}
+
+// ─── Tag clicks ───────────────────────────────────────────────────────────────
+document.querySelectorAll('.tag').forEach(tag => {
+  tag.addEventListener('click', () => {
+    const filter = tag.dataset.filter;
+    const val = tag.dataset.val;
+    if (active[filter] === val) {
+      active[filter] = null;
+      tag.classList.remove('active');
+    } else {
+      // deactivate previous tag in same group
+      document.querySelectorAll(`.tag[data-filter="${filter}"]`).forEach(t => t.classList.remove('active'));
+      active[filter] = val;
+      tag.classList.add('active');
+    }
+    expandedId = null;
+    render();
+  });
+});
+
+function resetAll() {
+  Object.keys(active).forEach(k => active[k] = null);
+  document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+  expandedId = null;
+  render();
+}
+
+// ─── Collapsible sections ─────────────────────────────────────────────────────
+function toggleSection(name) {
+  const body = document.getElementById(`${name}-body`);
+  const toggle = document.getElementById(`${name}-toggle`);
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+// ─── Torque calculator ────────────────────────────────────────────────────────
+// T = K * d * F  (torque = nut factor × diameter × clamp force)
+// Proof loads (N) by grade + size (approximate nominal values)
+const PROOF = {
+  // [grade][size] = proof load in kN
+  'cs5':     { 'm6':6.0,'m8':11.2,'m10':17.9,'m12':25.9,'m16':50.7,'3/8':12.5,'1/2':22.2,'5/8':35.1,'3/4':51.0 },
+  'cs8':     { 'm6':9.0,'m8':16.5,'m10':26.4,'m12':38.2,'m16':74.9,'3/8':18.5,'1/2':32.9,'5/8':52.0,'3/4':75.5 },
+  'as-b7':   { 'm6':10.0,'m8':18.0,'m10':29.0,'m12':42.0,'m16':82.0,'3/8':20.0,'1/2':36.0,'5/8':57.0,'3/4':83.0 },
+  'ss304-a270': { 'm6':5.0,'m8':9.3,'m10':14.9,'m12':21.5,'m16':42.2,'3/8':10.4,'1/2':18.5,'5/8':29.3,'3/4':42.5 },
+  'ss316-a480': { 'm6':6.5,'m8':12.1,'m10':19.3,'m12':27.9,'m16':54.8,'3/8':13.5,'1/2':24.0,'5/8':38.0,'3/4':55.2 },
+  'al':      { 'm6':2.5,'m8':4.7,'m10':7.5,'m12':10.8,'m16':21.1,'3/8':5.2,'1/2':9.3,'5/8':14.7,'3/4':21.3 },
+  'ti':      { 'm6':8.5,'m8':15.8,'m10':25.3,'m12':36.5,'m16':71.6,'3/8':17.6,'1/2':31.3,'5/8':49.5,'3/4':71.8 },
+};
+const DIAMETER_MM = { 'm6':6,'m8':8,'m10':10,'m12':12,'m16':16,'3/8':9.525,'1/2':12.7,'5/8':15.875,'3/4':19.05 };
+const K_FACTOR = { dry:0.20, oiled:0.17, antiseize:0.13, ptfe:0.12 };
+
+function calcTorque() {
+  const grade = document.getElementById('tq-grade').value;
+  const size  = document.getElementById('tq-size').value;
+  const lube  = document.getElementById('tq-lube').value;
+  const valEl = document.getElementById('torque-val');
+  const noteEl = document.getElementById('torque-note');
+
+  if (!grade || !size) {
+    valEl.textContent = '—';
+    noteEl.textContent = 'Select grade, diameter, and condition';
+    return;
+  }
+
+  const F = PROOF[grade][size] * 1000;   // N (70% proof load target)
+  const d = DIAMETER_MM[size] / 1000;    // m
+  const K = K_FACTOR[lube];
+  const T = K * d * F * 0.70;            // 70% of proof load as target preload
+
+  const Tnm = Math.round(T);
+  const Tftlb = Math.round(T * 0.7376 * 10) / 10;
+
+  valEl.textContent = `${Tnm} N·m`;
+  noteEl.textContent = `≈ ${Tftlb} ft·lb · 70% proof load target · K=${K}`;
+}
+
+// ─── Checklist progress ───────────────────────────────────────────────────────
+function updateProgress() {
+  const all   = document.querySelectorAll('.checklist-body input[type=checkbox]');
+  const done  = document.querySelectorAll('.checklist-body input[type=checkbox]:checked');
+  const pct   = Math.round((done.length / all.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${done.length} of ${all.length} items complete`;
+
+  // Strike through done items
+  all.forEach(cb => {
+    cb.closest('.check-item').classList.toggle('done', cb.checked);
+  });
+}
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
