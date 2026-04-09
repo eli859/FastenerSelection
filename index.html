@@ -7,47 +7,97 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0f0f;
-    --surface: #181818;
-    --surface2: #222222;
-    --surface3: #2a2a2a;
-    --border: #333333;
-    --border2: #444444;
-    --text: #e8e6e0;
-    --text2: #9a9690;
-    --text3: #5a5854;
+    --bg: #0c0c0e;
+    --surface: #141416;
+    --surface2: #1c1c1f;
+    --surface3: #242428;
+    --border: #2a2a2e;
+    --border2: #3a3a3f;
+    --text: #eceae4;
+    --text2: #9a9894;
+    --text3: #585654;
     --accent: #c8a96e;
     --accent2: #8fba6a;
     --accent3: #6aaaba;
     --warn: #c07850;
     --danger: #c06060;
-    --tag-active-bg: #c8a96e18;
-    --tag-active-border: #c8a96e66;
+    --tag-active-bg: #c8a96e14;
+    --tag-active-border: #c8a96e55;
     --mono: 'IBM Plex Mono', monospace;
     --sans: 'IBM Plex Sans', sans-serif;
+
+    /* Material color palette */
+    --col-steel-bg: #1a1a22;
+    --col-steel-border: #3a3a5a;
+    --col-steel-accent: #7a8fc8;
+    --col-steel-muted: #4a5280;
+
+    --col-ss-bg: #181e1a;
+    --col-ss-border: #2a5040;
+    --col-ss-accent: #5ab890;
+    --col-ss-muted: #2a6048;
+
+    --col-ti-bg: #1e1a1a;
+    --col-ti-border: #5a3a2a;
+    --col-ti-accent: #c87850;
+    --col-ti-muted: #703820;
+
+    --col-al-bg: #1a1c20;
+    --col-al-border: #38404a;
+    --col-al-accent: #8aaac8;
+    --col-al-muted: #405060;
+
+    --col-brass-bg: #1e1c14;
+    --col-brass-border: #504020;
+    --col-brass-accent: #c8a040;
+    --col-brass-muted: #604818;
+
+    --col-nylon-bg: #1a1820;
+    --col-nylon-border: #3a3050;
+    --col-nylon-accent: #9070c8;
+    --col-nylon-muted: #483060;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 13px; line-height: 1.5; min-height: 100vh; }
 
   .shell { display: grid; grid-template-columns: 290px 1fr; grid-template-rows: auto 1fr; min-height: 100vh; }
 
-  header { grid-column: 1 / -1; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: baseline; gap: 16px; }
+  header { grid-column: 1 / -1; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: baseline; gap: 16px; background: var(--surface); }
   header h1 { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
   header span { font-family: var(--mono); font-size: 11px; color: var(--text3); }
 
-  .sidebar { border-right: 1px solid var(--border); padding: 16px 0; overflow-y: auto; }
+  .sidebar { border-right: 1px solid var(--border); padding: 16px 0; overflow-y: auto; background: var(--surface); }
   .filter-section { padding: 0 16px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
   .filter-section:last-of-type { border-bottom: none; }
   .filter-label { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
   .tags { display: flex; flex-wrap: wrap; gap: 5px; }
-  .tag { font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 3px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); cursor: pointer; transition: all 0.1s; user-select: none; white-space: nowrap; }
+
+  /* Colored tags by filter category */
+  .tag { font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 3px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); cursor: pointer; transition: all 0.12s; user-select: none; white-space: nowrap; }
   .tag:hover { border-color: var(--border2); color: var(--text); }
-  .tag.active { background: var(--tag-active-bg); border-color: var(--tag-active-border); color: var(--accent); }
+
+  [data-filter="type"].tag.active    { background: #1a1830; border-color: #6050c0; color: #a090e8; }
+  [data-filter="substrate"].tag.active { background: #181e18; border-color: #3a6030; color: #70b860; }
+  [data-filter="size"].tag.active    { background: #201818; border-color: #603030; color: #c07060; }
+  [data-filter="material"].tag.active { background: #1a1c20; border-color: #405060; color: #80aac8; }
+  [data-filter="priority"].tag.active { background: #201c14; border-color: #604818; color: #c8a040; }
+
+  [data-filter="type"]:hover    { border-color: #4040a0; color: #9080d0; }
+  [data-filter="substrate"]:hover { border-color: #305028; color: #60a050; }
+  [data-filter="size"]:hover    { border-color: #502828; color: #b06050; }
+  [data-filter="material"]:hover { border-color: #304050; color: #7090b0; }
+  [data-filter="priority"]:hover { border-color: #504010; color: #b09030; }
+
+  .finish-tag { display: inline-flex; align-items: center; gap: 6px; }
+  .finish-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  [data-filter="finish"].tag.active { background: #1a1820; border-color: #605060; color: #c0a8c8; }
+  [data-filter="finish"]:hover { border-color: #504050; color: #a888b8; }
+
   .reset-btn { font-family: var(--mono); font-size: 10px; color: var(--text3); background: none; border: none; cursor: pointer; padding: 0; margin-top: 8px; letter-spacing: 0.06em; transition: color 0.12s; }
   .reset-btn:hover { color: var(--danger); }
 
   .main { display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-  .results-header { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .results-header { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--surface); }
   .results-count { font-family: var(--mono); font-size: 11px; color: var(--text3); white-space: nowrap; }
   .results-count strong { color: var(--accent); font-weight: 500; }
 
@@ -55,26 +105,68 @@
   .active-chip { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 2px; background: var(--tag-active-bg); border: 1px solid var(--tag-active-border); color: var(--accent); }
   .no-filters { font-family: var(--mono); font-size: 11px; color: var(--text3); }
 
-  .cards { padding: 16px 20px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; align-content: start; }
+  .cards { padding: 16px 20px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 10px; align-content: start; }
   .no-results { padding: 48px; text-align: center; color: var(--text3); font-family: var(--mono); font-size: 12px; }
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px; cursor: pointer; transition: border-color 0.12s, background 0.12s; }
-  .card:hover { border-color: var(--border2); background: var(--surface2); }
-  .card.expanded { border-color: var(--accent); background: var(--surface2); grid-column: 1 / -1; }
+  /* Base card */
+  .card { border-radius: 7px; padding: 14px; cursor: pointer; transition: border-color 0.12s, background 0.12s; border: 1px solid var(--border); background: var(--surface); position: relative; overflow: hidden; }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0.7; }
+  .card:hover { border-color: var(--border2); }
+  .card.expanded { grid-column: 1 / -1; }
+
+  /* Color coding by material */
+  .card[data-mat="steel"]  { background: var(--col-steel-bg); border-color: var(--col-steel-border); }
+  .card[data-mat="steel"]::before  { background: var(--col-steel-accent); }
+  .card[data-mat="steel"]:hover  { border-color: var(--col-steel-accent); }
+  .card[data-mat="steel"].expanded { border-color: var(--col-steel-accent); box-shadow: 0 0 0 1px var(--col-steel-border); }
+
+  .card[data-mat="ss"]    { background: var(--col-ss-bg); border-color: var(--col-ss-border); }
+  .card[data-mat="ss"]::before    { background: var(--col-ss-accent); }
+  .card[data-mat="ss"]:hover    { border-color: var(--col-ss-accent); }
+  .card[data-mat="ss"].expanded { border-color: var(--col-ss-accent); box-shadow: 0 0 0 1px var(--col-ss-border); }
+
+  .card[data-mat="ti"]    { background: var(--col-ti-bg); border-color: var(--col-ti-border); }
+  .card[data-mat="ti"]::before    { background: var(--col-ti-accent); }
+  .card[data-mat="ti"]:hover    { border-color: var(--col-ti-accent); }
+  .card[data-mat="ti"].expanded { border-color: var(--col-ti-accent); box-shadow: 0 0 0 1px var(--col-ti-border); }
+
+  .card[data-mat="al"]    { background: var(--col-al-bg); border-color: var(--col-al-border); }
+  .card[data-mat="al"]::before    { background: var(--col-al-accent); }
+  .card[data-mat="al"]:hover    { border-color: var(--col-al-accent); }
+  .card[data-mat="al"].expanded { border-color: var(--col-al-accent); box-shadow: 0 0 0 1px var(--col-al-border); }
+
+  .card[data-mat="brass"]  { background: var(--col-brass-bg); border-color: var(--col-brass-border); }
+  .card[data-mat="brass"]::before  { background: var(--col-brass-accent); }
+  .card[data-mat="brass"]:hover  { border-color: var(--col-brass-accent); }
+  .card[data-mat="brass"].expanded { border-color: var(--col-brass-accent); box-shadow: 0 0 0 1px var(--col-brass-border); }
+
+  .card[data-mat="nylon"]  { background: var(--col-nylon-bg); border-color: var(--col-nylon-border); }
+  .card[data-mat="nylon"]::before  { background: var(--col-nylon-accent); }
+  .card[data-mat="nylon"]:hover  { border-color: var(--col-nylon-accent); }
+  .card[data-mat="nylon"].expanded { border-color: var(--col-nylon-accent); box-shadow: 0 0 0 1px var(--col-nylon-border); }
 
   .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .card-title-row { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+  .mat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .card-title { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; }
-  .card-grade { font-family: var(--mono); font-size: 10px; color: var(--accent); background: var(--tag-active-bg); border: 1px solid var(--tag-active-border); border-radius: 3px; padding: 2px 6px; white-space: nowrap; flex-shrink: 0; }
+  .card-grade { font-family: var(--mono); font-size: 10px; color: var(--text3); background: var(--surface3); border: 1px solid var(--border2); border-radius: 3px; padding: 2px 6px; white-space: nowrap; flex-shrink: 0; }
 
   .card-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
   .pill { font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 2px; border: 1px solid var(--border); color: var(--text3); }
-  .pill.type  { border-color: #c8a96e33; color: var(--accent); }
-  .pill.env   { border-color: #6aaaba33; color: var(--accent3); }
-  .pill.mat   { border-color: #8fba6a33; color: var(--accent2); }
-  .pill.warn  { border-color: #c0785033; color: var(--warn); }
+  .pill.type  { border-color: #6050c044; color: #a090d8; }
+  .pill.env   { border-color: #3a603044; color: #70b860; }
+  .pill.mat   { border-color: #40506044; color: #80aac8; }
+  .pill.warn  { border-color: #c0784044; color: var(--warn); }
+  .pill.finish { border-color: #50405844; color: #b090b8; display: inline-flex; align-items: center; gap: 4px; }
+  .pill-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
   .card-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .expand-hint { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+  .mcmaster-btn { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border-radius: 3px; border: 1px solid var(--border2); background: var(--surface3); color: var(--text2); cursor: pointer; text-decoration: none; transition: all 0.12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .mcmaster-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--tag-active-bg); }
+  .mcmaster-btn::before { content: '↗'; font-size: 10px; }
 
   .card-details { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
   .card.expanded .card-details { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
@@ -90,9 +182,14 @@
   .failure-box li { font-size: 12px; color: #c07070; padding-left: 12px; position: relative; }
   .failure-box li::before { content: '!'; position: absolute; left: 0; color: var(--danger); font-size: 10px; font-family: var(--mono); }
 
+  /* ── Legend ── */
+  .mat-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 10px 20px; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--text3); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
   /* ── Tabs ── */
   .bottom-tabs { border-top: 1px solid var(--border); }
-  .tab-bar { display: flex; border-bottom: 1px solid var(--border); padding: 0 20px; }
+  .tab-bar { display: flex; border-bottom: 1px solid var(--border); padding: 0 20px; background: var(--surface); }
   .tab-btn { font-family: var(--mono); font-size: 11px; padding: 10px 16px; border: none; background: none; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.12s; letter-spacing: 0.06em; text-transform: uppercase; }
   .tab-btn:hover { color: var(--text2); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -127,7 +224,7 @@
   .check-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 7px; cursor: pointer; user-select: none; }
   .check-item input[type=checkbox] { appearance: none; width: 14px; height: 14px; border: 1px solid var(--border2); border-radius: 2px; background: var(--surface3); cursor: pointer; flex-shrink: 0; margin-top: 1px; transition: all 0.12s; position: relative; }
   .check-item input[type=checkbox]:checked { background: var(--accent); border-color: var(--accent); }
-  .check-item input[type=checkbox]:checked::after { content: ''; position: absolute; left: 3px; top: 1px; width: 5px; height: 8px; border: 1.5px solid #0f0f0f; border-left: none; border-top: none; transform: rotate(45deg); }
+  .check-item input[type=checkbox]:checked::after { content: ''; position: absolute; left: 3px; top: 1px; width: 5px; height: 8px; border: 1.5px solid #0c0c0e; border-left: none; border-top: none; transform: rotate(45deg); }
   .check-item span { font-size: 12px; color: var(--text2); line-height: 1.5; }
   .check-item.done span { color: var(--text3); text-decoration: line-through; }
   .progress-bar { height: 2px; background: var(--surface3); border-radius: 1px; margin-top: 16px; overflow: hidden; }
@@ -218,6 +315,42 @@
     </div>
   </div>
 
+  <div class="filter-section">
+    <div class="filter-label">Finish / appearance</div>
+    <div class="tags">
+      <div class="tag finish-tag" data-filter="finish" data-val="black-oxide">
+        <span class="finish-dot" style="background:#1a1a1a;border:1px solid #555"></span>Black oxide
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="zinc-clear">
+        <span class="finish-dot" style="background:#c8d4c0;border:1px solid #888"></span>Zinc clear
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="zinc-yellow">
+        <span class="finish-dot" style="background:#c8b840;border:1px solid #a09020"></span>Zinc yellow
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="hot-dip">
+        <span class="finish-dot" style="background:#9a9888;border:1px solid #707060"></span>Hot-dip galv.
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="silver">
+        <span class="finish-dot" style="background:#c0c4c8;border:1px solid #9098a0"></span>Silver (bare SS/Al)
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="passivated">
+        <span class="finish-dot" style="background:#b0b8b4;border:1px solid #8090a0"></span>Passivated
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="anodized">
+        <span class="finish-dot" style="background:#5878a8;border:1px solid #3050a0"></span>Anodized
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="gold">
+        <span class="finish-dot" style="background:#c8a040;border:1px solid #a07820"></span>Gold / brass
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="nickel">
+        <span class="finish-dot" style="background:#c0b8a8;border:1px solid #908878"></span>Nickel plated
+      </div>
+      <div class="tag finish-tag" data-filter="finish" data-val="ptfe-coat">
+        <span class="finish-dot" style="background:#e8e0d0;border:1px solid #b0a888"></span>PTFE / Xylan
+      </div>
+    </div>
+  </div>
+
   <div style="padding: 0 16px;">
     <button class="reset-btn" onclick="resetAll()">✕ clear all filters</button>
   </div>
@@ -232,6 +365,16 @@
       <span class="no-filters">No filters active — showing all</span>
     </div>
     <div class="results-count"><strong id="count">0</strong> results</div>
+  </div>
+
+  <div class="mat-legend">
+    <span style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-right:4px;">Material</span>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-steel-accent)"></div>Alloy steel</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-ss-accent)"></div>Stainless</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-ti-accent)"></div>Titanium</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-al-accent)"></div>Aluminum</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-brass-accent)"></div>Brass</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-nylon-accent)"></div>Nylon / plastic</div>
   </div>
 
   <div class="cards" id="cards"></div>
@@ -491,6 +634,57 @@
 </div><!-- /shell -->
 
 <script>
+// ─── McMaster search URL builder ──────────────────────────────────────────
+// URLs follow McMaster's compound filter pattern: /type-slug/material~X/type-refinement~/material-slug~~/
+const MM_URLS = {
+  // Socket head cap screws
+  'shcs-steel':   'https://www.mcmaster.com/socket-head-screws/material~alloy-steel/socket-head-screws-2~/steel-socket-head-screws~~/',
+  'shcs-ss316':   'https://www.mcmaster.com/socket-head-screws/material~stainless-steel/socket-head-screws-2~/316-stainless-steel-socket-head-screws~~/',
+  'shcs-ti':      'https://www.mcmaster.com/socket-head-screws/material~titanium/socket-head-screws-2~/titanium-socket-head-screws~~/',
+
+  // Button head cap screws
+  'bhcs-steel':   'https://www.mcmaster.com/button-head-screws/material~alloy-steel/socket-head-screws-2~/steel-socket-head-screws~~/',
+  'bhcs-ss':      'https://www.mcmaster.com/button-head-screws/material~stainless-steel/socket-head-screws-2~/stainless-steel-button-head-screws~~/',
+
+  // Flat / countersunk
+  'flat-steel':   'https://www.mcmaster.com/flat-head-screws/material~alloy-steel/socket-head-screws-2~/steel-flat-head-screws~~/',
+
+  // Low-profile socket head
+  'low-profile-steel': 'https://www.mcmaster.com/low-head-socket-head-cap-screws/material~alloy-steel/',
+
+  // Shoulder bolts
+  'shoulder-steel': 'https://www.mcmaster.com/shoulder-screws/material~alloy-steel/shoulder-screws-2~/steel-shoulder-screws~~/',
+  'shoulder-ss':    'https://www.mcmaster.com/shoulder-screws/material~stainless-steel/shoulder-screws-2~/stainless-steel-shoulder-screws~~/',
+
+  // Standoffs
+  'standoff-al':  'https://www.mcmaster.com/hex-standoffs/material~aluminum/standoffs-2~/aluminum-hex-standoffs~~/',
+  'standoff-ss':  'https://www.mcmaster.com/hex-standoffs/material~stainless-steel/standoffs-2~/stainless-steel-hex-standoffs~~/',
+
+  // Heat-set inserts
+  'heatset-brass': 'https://www.mcmaster.com/heat-set-inserts/material~brass/heat-set-inserts-2~/brass-heat-set-inserts~~/',
+  'heatset-steel': 'https://www.mcmaster.com/heat-set-inserts/material~steel/heat-set-inserts-2~/steel-heat-set-inserts~~/',
+
+  // Self-tapping
+  'selftap-ss':   'https://www.mcmaster.com/thread-forming-screws/material~stainless-steel/self-tapping-screws-2~/stainless-steel-self-tapping-screws~~/',
+
+  // Studs / threaded rod
+  'stud-steel':   'https://www.mcmaster.com/double-end-threaded-studs/material~alloy-steel/threaded-studs-2~/steel-double-end-studs~~/',
+
+  // Machine screws
+  'machine-nylon': 'https://www.mcmaster.com/screws/material~nylon/screws-2~/nylon-screws~~/',
+  'machine-brass': 'https://www.mcmaster.com/screws/material~brass/screws-2~/brass-screws~~/',
+};
+
+// ─── Material dot colors ───────────────────────────────────────────────────
+const MAT_COLORS = {
+  steel: 'var(--col-steel-accent)',
+  ss:    'var(--col-ss-accent)',
+  ti:    'var(--col-ti-accent)',
+  al:    'var(--col-al-accent)',
+  brass: 'var(--col-brass-accent)',
+  nylon: 'var(--col-nylon-accent)',
+};
+
 // ─── Fastener data ─────────────────────────────────────────────────────────
 const FASTENERS = [
   // ── SHCS ──
@@ -509,6 +703,7 @@ const FASTENERS = [
       'Robotics use cases':['Drive train frames','Motor mounts (with Loctite 243)','Gearbox housings','Structural tube joints'],
       'Thread in aluminum':['Min 1.5× diameter engagement','Consider Helicoil for M6+ in thin aluminum','Tap to H2 tolerance for clean engagement'],
     },
+    finishes:['black-oxide','zinc-clear','zinc-yellow','ptfe-coat'],
     failures:['Stripping aluminum threads — use inserts for M6+, min 1.5× engagement','Backing out under vibration — Loctite 243 on all structural joints','Using in stainless substrate without anti-seize — galling'],
   },
   {
@@ -526,6 +721,7 @@ const FASTENERS = [
       'Robotics use cases':['Outdoor / field robot structures','Aquatic robots','Wet environments','Food handling end effectors'],
       'Galling prevention':['Always lubricate with anti-seize or PTFE paste','Never spin in dry','For M8+ consider A4-80 or duplex'],
     },
+    finishes:['silver','passivated','ptfe-coat'],
     failures:['Galling during installation — seizes before reaching torque, thread damage','Overestimating strength vs alloy steel — A4-70 proof load is ~60% of 12.9','Mixing 304 and 316 hardware in same joint'],
   },
   {
@@ -543,10 +739,9 @@ const FASTENERS = [
       'Robotics use cases':['Competition robots (weight budget)','Drone / aerial structure','Carbon fiber subframe joints','High-cycle fatigue applications'],
       'Sourcing':['McMaster-Carr stocks M4–M12 and #10–1/2"','Titanium Joe, Aircraft Spruce for specialty sizes','Lead time can be 2–3 weeks for unusual sizes'],
     },
+    finishes:['silver','ptfe-coat'],
     failures:['Severe galling — always use dry-film PTFE or Loctite 243 (cure prevents galling)','Driving too fast — use low-speed torque driver, never impact','Not magnetic — cannot be found with magnetic sweeps'],
   },
-
-  // ── Button head ──
   {
     id:'bhcs-steel',
     title:'Button head cap screw — alloy steel',
@@ -562,6 +757,7 @@ const FASTENERS = [
       'Robotics use cases':['Electronics enclosure covers','Panel retention','Wire routing clips','Cosmetic / accessible surfaces'],
       'Limitations':['Lower torque capacity — not for structural joints over ~15 N·m','Hex key engagement is shallower — cam-out risk if over-torqued'],
     },
+    finishes:['black-oxide','zinc-clear'],
     failures:['Cam-out stripping the socket when over-driven — use torque limiter','Using as structural bolt — not rated for it','Substituting for SHCS in high-load joints'],
   },
   {
@@ -579,6 +775,7 @@ const FASTENERS = [
       'Robotics use cases':['Sensor housings','Gripper assemblies','Exterior panel fastening','PCB retention brackets'],
       'With carbon fiber':['Use nylon or PTFE washer under head to prevent galvanic contact','Check that CF ply orientation doesn\'t split under head bearing area'],
     },
+    finishes:['silver','passivated'],
     failures:['Galling in stainless tapped holes — use anti-seize','Over-torquing small socket — M3 and under strip easily in 304 SS'],
   },
 
@@ -598,6 +795,7 @@ const FASTENERS = [
       'Robotics use cases':['Sliding joint covers','Cable drag chains','Wheeled platforms (floor-contacting surfaces)','Thin gusset plates'],
       'Countersink tips':['Countersink depth = exactly flush or 0.1 mm below surface','Use countersink gauge or depth micrometer to verify','Aluminum: use carbide countersink — cobalt HSS work hardens surface'],
     },
+    finishes:['black-oxide','zinc-clear','zinc-yellow'],
     failures:['Rocking due to undersized countersink — always cut to depth','Head pullthrough in thin aluminum — minimum 2mm plate thickness for M4','Wrong countersink angle — 82° and 90° are not interchangeable'],
   },
 
@@ -617,6 +815,7 @@ const FASTENERS = [
       'Robotics use cases':['Tight actuator mounting zones','Multi-layer sandwich structures','Any location where a standard SHCS head fouls adjacent geometry'],
       'Drive key':['Uses a through-hole in the head — can be driven from beneath with long key','Useful for blind installations'],
     },
+    finishes:['black-oxide','zinc-clear'],
     failures:['Torquing with a short key arm — insufficient leverage for full preload','Confusing with standard SHCS in assembly — color-code or physically separate hardware bins'],
   },
 
@@ -636,6 +835,7 @@ const FASTENERS = [
       'Robotics use cases':['Four-bar linkages','Rocker arm pivots','Bearing retention in housings','Linear guide pins','Crank pivots on mechanisms'],
       'Design rules':['Clearance fit in moving part, threaded engagement in fixed part','Shoulder must be longer than the floating component thickness','Never substitute with a regular bolt — no precision diameter'],
     },
+    finishes:['black-oxide','zinc-clear'],
     failures:['Using a regular SHCS as a pivot — shank is not ground, loose fit causes slop and wear','Thread bottoming before shoulder seats — counterbore depth must match shoulder length','Insufficient shoulder engagement length — shoulder should span full bearing surface'],
   },
   {
@@ -653,6 +853,7 @@ const FASTENERS = [
       'Robotics use cases':['Outdoor mechanism pivots','Aquatic robot linkages','Corrosion-sensitive assemblies'],
       'Bushing pairings':['Igus iglide J for low load, dry running','PTFE-lined bronze for higher loads','Oil-impregnated sintered bronze for continuous rotation'],
     },
+    finishes:['silver','passivated'],
     failures:['Galling at pivot interface — always use a bushing or bearing','Corrosion seizing the shoulder in the bore — apply anti-seize on assembly'],
   },
 
@@ -672,6 +873,7 @@ const FASTENERS = [
       'Robotics use cases':['PCB mounting in electronics bays','Sensor standoffs','Panel-to-panel spacing','Camera / lidar elevation plates'],
       'Torque guidance':['M2.5 FF standoff: 0.2–0.3 N·m max into PCB','Nylon washer under head prevents PCB trace damage','Hand-tight + quarter turn is a reliable field method for M3 and under'],
     },
+    finishes:['silver','anodized'],
     failures:['Over-torquing M2/M2.5 into PCB — pulls barrel nut inserts, cracks boards','Mixing thread pitches — M2.5 and M3 look similar, standardize one size per bay','Using steel screws into aluminum standoffs without anti-seize — galvanic corrosion in outdoor robots'],
   },
   {
@@ -689,6 +891,7 @@ const FASTENERS = [
       'Robotics use cases':['Field robot electronics bays','High-vibration drive train electronics','Legacy PCB with 4-40 pattern'],
       'Imperial note':['4-40 and 6-32 standoffs common for legacy PCB hole patterns','M2.5 and M3 are modern standard — use metric for new designs'],
     },
+    finishes:['silver','passivated','nickel'],
     failures:['303 SS corrodes faster than 316 in marine/wet — specify 316 for outdoor','Over-torquing into plastic standoff nuts — always use metal back nut'],
   },
 
@@ -708,6 +911,7 @@ const FASTENERS = [
       'By print material':['PLA: 200–210°C install temp','PETG: 230–240°C','ABS/ASA: 240°C','Nylon: 250–260°C — use slightly higher iron temp'],
       'Robotics use cases':['3D-printed electronics enclosures','Custom sensor brackets','Gripper finger bodies','Any printed part with >3 assembly/disassembly cycles'],
     },
+    finishes:['gold'],
     failures:['Installing too hot — melts excess plastic into threads, fills bore','Installing too cold — insert sits proud, breaks free under load','Using printed threads directly for anything load-bearing — never do this for structural joints','Placing too close to edge — min 2× insert OD from part edge'],
   },
   {
@@ -725,6 +929,7 @@ const FASTENERS = [
       'When to use over brass':['Static or dynamic structural joints in printed parts','Load >50 N in pullout direction','Nylon or PC substrate (higher install temp, steel holds better)'],
       'Installation':['Requires higher iron temp — 260–280°C for Nylon','Press square to surface — use alignment jig or guide'],
     },
+    finishes:['zinc-clear','zinc-yellow'],
     failures:['Installing at brass temp in nylon — under-bonded, pulls out under load','Driving fastener torque beyond 60% proof load in printed substrate — cracks the boss'],
   },
 
@@ -744,6 +949,7 @@ const FASTENERS = [
       'Robotics use cases':['Sheet metal electronics enclosures','Plastic covers and panels','Cable routing clips in thin aluminum extrusion','One-time assembly panels'],
       'Hole size critical':['Use undersized pilot hole — too large = stripped on first install','Aluminum: drill to ~75% of nominal diameter','Plastic / Delrin: ~70%'],
     },
+    finishes:['passivated','silver'],
     failures:['Re-using self-tapping in same hole — threads wear after ~3 cycles, use machine screw insert','Over-driving — torque drops suddenly after breakthrough, stop immediately','Using in SHCS structural holes — self-tapping threads loosen under vibration'],
   },
 
@@ -763,6 +969,7 @@ const FASTENERS = [
       'Robotics use cases':['Motor face mounting (NEMA standard patterns)','Permanent anchor points in aluminum frames','Through-bolted pivot assemblies','Axis-of-rotation reference mounts'],
       'Locking the stud':['Loctite 271 or 243 in the tapped hole before installing stud','Jam nut method for field-removable applications'],
     },
+    finishes:['black-oxide','zinc-clear','hot-dip'],
     failures:['Stud backing out with nut — use Loctite 243 in stud end thread always','Thread engagement too short in aluminum — use full-thread depth, min 1.5× diameter','Mixing stud and bolt patterns — NEMA stud patterns are fixed, don\'t improvise'],
   },
 
@@ -782,6 +989,7 @@ const FASTENERS = [
       'Robotics use cases':['PCB standoff mounting near high-voltage traces','Magnetic encoder proximity mounting (no metal near magnet)','EMI shielding assembly','Non-conductive fixture tooling'],
       'Limitations':['Max torque ~0.3 N·m (M3) before head shears','Not suitable for any structural or load-bearing joint','Brittle at low temperatures'],
     },
+    finishes:['silver'],
     failures:['Using in structural joint — will fail under any real load','Over-torquing — nylon shears with no warning','Thread galling even in nylon-to-nylon — use slightly different polymer for nut vs bolt'],
   },
   {
@@ -799,20 +1007,35 @@ const FASTENERS = [
       'Robotics use cases':['Ground strap termination points','Legacy electronics PCB mounting','Custom RF / antenna assemblies','Delrin pivot bushings (self-lubricating pair)'],
       'With carbon fiber':['Brass is galvanically compatible with carbon fiber — use brass hardware directly against CF laminate','Preferred over aluminum for CF bonded inserts'],
     },
+    finishes:['gold','nickel','zinc-clear'],
     failures:['Using where conductivity is a hazard — always check circuit topology','Work-hardening threads on repeated assembly — replace after ~10 cycles'],
   },
 ];
 
-// ─── State ─────────────────────────────────────────────────────────────────
-const active = { type:null, substrate:null, size:null, material:null, priority:null };
+const FINISH_META = {
+  'black-oxide': { color:'#2a2a2a', label:'Black oxide' },
+  'zinc-clear':  { color:'#c0ccb8', label:'Zinc clear' },
+  'zinc-yellow': { color:'#c8b840', label:'Zinc yellow' },
+  'hot-dip':     { color:'#9a9888', label:'Hot-dip galv.' },
+  'silver':      { color:'#c0c4c8', label:'Silver' },
+  'passivated':  { color:'#b0b8b4', label:'Passivated' },
+  'anodized':    { color:'#5878a8', label:'Anodized' },
+  'gold':        { color:'#c8a040', label:'Gold / brass' },
+  'nickel':      { color:'#c0b8a8', label:'Nickel' },
+  'ptfe-coat':   { color:'#e0d8c8', label:'PTFE / Xylan' },
+};
+
+
+const active = { type:null, substrate:null, size:null, material:null, priority:null, finish:null };
 let expandedId = null;
 
 function matches(f) {
-  if (active.type     && !f.types.includes(active.type))          return false;
+  if (active.type      && !f.types.includes(active.type))           return false;
   if (active.substrate && !f.substrates.includes(active.substrate)) return false;
-  if (active.size     && !f.sizes.includes(active.size))           return false;
-  if (active.material && !f.materials.includes(active.material))   return false;
-  if (active.priority && !f.priorities.includes(active.priority))  return false;
+  if (active.size      && !f.sizes.includes(active.size))           return false;
+  if (active.material  && !f.materials.includes(active.material))   return false;
+  if (active.priority  && !f.priorities.includes(active.priority))  return false;
+  if (active.finish    && !(f.finishes||[]).includes(active.finish)) return false;
   return true;
 }
 
@@ -834,6 +1057,9 @@ function render() {
 
   container.innerHTML = results.map(f => {
     const isExp = expandedId === f.id;
+    const primaryMat = f.materials[0];
+    const dotColor = MAT_COLORS[primaryMat] || 'var(--text3)';
+    const mmUrl = MM_URLS[f.id] || 'https://www.mcmaster.com/screws/';
     const detailHtml = Object.entries(f.details).map(([title,items])=>`
       <div class="detail-group">
         <h4>${title}</h4>
@@ -846,9 +1072,12 @@ function render() {
       </div>` : '';
 
     return `
-      <div class="card${isExp?' expanded':''}" onclick="toggleCard('${f.id}')">
+      <div class="card${isExp?' expanded':''}" data-mat="${primaryMat}" onclick="handleCardClick(event,'${f.id}')">
         <div class="card-top">
-          <div class="card-title">${f.title}</div>
+          <div class="card-title-row">
+            <div class="mat-dot" style="background:${dotColor}"></div>
+            <div class="card-title">${f.title}</div>
+          </div>
           <div class="card-grade">${f.grade}</div>
         </div>
         <div class="card-pills">
@@ -856,9 +1085,13 @@ function render() {
           ${f.sizes.map(s=>`<span class="pill env">${s}</span>`).join('')}
           ${f.materials.map(m=>`<span class="pill mat">${m}</span>`).join('')}
           ${f.priorities.map(p=>`<span class="pill warn">${p}</span>`).join('')}
+          ${(f.finishes||[]).map(fn=>{ const m=FINISH_META[fn]||{}; return `<span class="pill finish"><span class="pill-dot" style="background:${m.color||'#888'};border:1px solid rgba(255,255,255,0.15)"></span>${m.label||fn}</span>`; }).join('')}
         </div>
         <div class="card-desc">${f.desc}</div>
-        <div class="expand-hint">${isExp?'▲ collapse':'▼ expand details + failure modes'}</div>
+        <div class="card-footer">
+          <div class="expand-hint">${isExp?'▲ collapse':'▼ details + failure modes'}</div>
+          <a class="mcmaster-btn" href="${mmUrl}" target="_blank" onclick="event.stopPropagation()">McMaster</a>
+        </div>
         <div class="card-details">
           ${detailHtml}
           ${failureHtml}
@@ -867,6 +1100,11 @@ function render() {
   }).join('');
 }
 
+function handleCardClick(e, id) {
+  if (e.target.closest('.mcmaster-btn')) return;
+  expandedId = expandedId === id ? null : id;
+  render();
+}
 function toggleCard(id) { expandedId = expandedId === id ? null : id; render(); }
 
 document.querySelectorAll('.tag').forEach(tag => {
