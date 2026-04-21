@@ -60,7 +60,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 13px; line-height: 1.5; min-height: 100vh; }
 
-  .shell { display: grid; grid-template-columns: 290px 1fr; grid-template-rows: auto 1fr; min-height: 100vh; }
+  .shell { display: grid; grid-template-columns: 420px 1fr; grid-template-rows: auto 1fr; min-height: 100vh; }
 
   header { grid-column: 1 / -1; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: baseline; gap: 16px; background: var(--surface); }
   header h1 { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
@@ -114,66 +114,75 @@
   .active-chip { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 2px; background: var(--tag-active-bg); border: 1px solid var(--tag-active-border); color: var(--accent); }
   .no-filters { font-family: var(--mono); font-size: 11px; color: var(--text3); }
 
-  .cards { padding: 16px 20px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 10px; align-content: start; }
+  .cards { padding: 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; align-content: start; }
   .no-results { padding: 48px; text-align: center; color: var(--text3); font-family: var(--mono); font-size: 12px; }
 
   /* Base card */
-  .card { border-radius: 7px; padding: 14px; cursor: pointer; transition: border-color 0.12s, background 0.12s; border: 1px solid var(--border); background: var(--surface); position: relative; overflow: hidden; }
-  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0.7; }
+  .card { border-radius: 7px; padding: 16px 20px; cursor: pointer; transition: border-color 0.12s, background 0.12s; border: 1px solid var(--border); background: var(--surface); position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto auto auto; column-gap: 20px; }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; opacity: 0.7; }
   .card:hover { border-color: var(--border2); }
-  .card.expanded { grid-column: 1 / -1; }
+  .card.expanded { grid-template-columns: 1fr; }
 
   /* Color coding by material */
   .card[data-mat="steel"]  { background: var(--col-steel-bg); border-color: var(--col-steel-border); }
   .card[data-mat="steel"]::before  { background: var(--col-steel-accent); }
   .card[data-mat="steel"]:hover  { border-color: var(--col-steel-accent); }
-  .card[data-mat="steel"].expanded { border-color: var(--col-steel-accent); box-shadow: 0 0 0 1px var(--col-steel-border); }
+  .card[data-mat="steel"].expanded { border-color: var(--col-steel-accent); }
 
   .card[data-mat="ss"]    { background: var(--col-ss-bg); border-color: var(--col-ss-border); }
   .card[data-mat="ss"]::before    { background: var(--col-ss-accent); }
   .card[data-mat="ss"]:hover    { border-color: var(--col-ss-accent); }
-  .card[data-mat="ss"].expanded { border-color: var(--col-ss-accent); box-shadow: 0 0 0 1px var(--col-ss-border); }
+  .card[data-mat="ss"].expanded { border-color: var(--col-ss-accent); }
 
   .card[data-mat="ti"]    { background: var(--col-ti-bg); border-color: var(--col-ti-border); }
   .card[data-mat="ti"]::before    { background: var(--col-ti-accent); }
   .card[data-mat="ti"]:hover    { border-color: var(--col-ti-accent); }
-  .card[data-mat="ti"].expanded { border-color: var(--col-ti-accent); box-shadow: 0 0 0 1px var(--col-ti-border); }
+  .card[data-mat="ti"].expanded { border-color: var(--col-ti-accent); }
 
   .card[data-mat="al"]    { background: var(--col-al-bg); border-color: var(--col-al-border); }
   .card[data-mat="al"]::before    { background: var(--col-al-accent); }
   .card[data-mat="al"]:hover    { border-color: var(--col-al-accent); }
-  .card[data-mat="al"].expanded { border-color: var(--col-al-accent); box-shadow: 0 0 0 1px var(--col-al-border); }
+  .card[data-mat="al"].expanded { border-color: var(--col-al-accent); }
 
   .card[data-mat="brass"]  { background: var(--col-brass-bg); border-color: var(--col-brass-border); }
   .card[data-mat="brass"]::before  { background: var(--col-brass-accent); }
   .card[data-mat="brass"]:hover  { border-color: var(--col-brass-accent); }
-  .card[data-mat="brass"].expanded { border-color: var(--col-brass-accent); box-shadow: 0 0 0 1px var(--col-brass-border); }
+  .card[data-mat="brass"].expanded { border-color: var(--col-brass-accent); }
 
   .card[data-mat="nylon"]  { background: var(--col-nylon-bg); border-color: var(--col-nylon-border); }
   .card[data-mat="nylon"]::before  { background: var(--col-nylon-accent); }
   .card[data-mat="nylon"]:hover  { border-color: var(--col-nylon-accent); }
-  .card[data-mat="nylon"].expanded { border-color: var(--col-nylon-accent); box-shadow: 0 0 0 1px var(--col-nylon-border); }
+  .card[data-mat="nylon"].expanded { border-color: var(--col-nylon-accent); }
 
-  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
   .card-title-row { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
-  .mat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .card-title { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; }
-  .card-grade { font-family: var(--mono); font-size: 10px; color: var(--text3); background: var(--surface3); border: 1px solid var(--border2); border-radius: 3px; padding: 2px 6px; white-space: nowrap; flex-shrink: 0; }
+  .mat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .card-title { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; }
+  .card-grade { font-family: var(--mono); font-size: 10px; color: var(--text3); background: var(--surface3); border: 1px solid var(--border2); border-radius: 3px; padding: 2px 8px; white-space: nowrap; flex-shrink: 0; }
 
-  .card-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
-  .pill { font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 2px; border: 1px solid var(--border); color: var(--text3); }
+  /* Two-column card body: description left, metadata right */
+  .card-inner { display: grid; grid-template-columns: 1fr 220px; gap: 0 24px; }
+  .card.expanded .card-inner { grid-template-columns: 1fr; }
+  .card-left { min-width: 0; }
+  .card-right { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; border-left: 1px solid var(--border); padding-left: 20px; }
+  .card.expanded .card-right { border-left: none; padding-left: 0; flex-direction: row; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border); }
+
+  .card-pills { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+  .pill { font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 2px; border: 1px solid var(--border); color: var(--text3); }
   .pill.type  { border-color: #6050c044; color: #a090d8; }
   .pill.env   { border-color: #3a603044; color: #70b860; }
   .pill.mat   { border-color: #40506044; color: #80aac8; }
   .pill.warn  { border-color: #c0784044; color: var(--warn); }
+  .pill.load  { border-color: #20687844; color: #50b8c8; }
+  .pill.vib   { border-color: #78202044; color: #d07070; }
   .pill.finish { border-color: #50405844; color: #b090b8; display: inline-flex; align-items: center; gap: 4px; }
   .pill-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-  .card-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+  .card-desc { font-size: 12px; color: var(--text2); line-height: 1.75; }
 
-  .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .expand-hint { font-family: var(--mono); font-size: 10px; color: var(--text3); }
-  .mcmaster-btn { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border-radius: 3px; border: 1px solid var(--border2); background: var(--surface3); color: var(--text2); cursor: pointer; text-decoration: none; transition: all 0.12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .card-footer { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: auto; }
+  .expand-hint { font-family: var(--mono); font-size: 10px; color: var(--text3); white-space: nowrap; }
+  .mcmaster-btn { font-family: var(--mono); font-size: 10px; padding: 4px 12px; border-radius: 3px; border: 1px solid var(--border2); background: var(--surface3); color: var(--text2); cursor: pointer; text-decoration: none; transition: all 0.12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
   .mcmaster-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--tag-active-bg); }
   .mcmaster-btn::before { content: '↗'; font-size: 10px; }
 
@@ -242,10 +251,12 @@
 
   .section-title { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
 
-  @media (max-width: 720px) {
+  @media (max-width: 900px) {
     .shell { grid-template-columns: 1fr; }
     .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
     .checklist-cols { grid-template-columns: 1fr; }
+    .card-inner { grid-template-columns: 1fr; }
+    .card-right { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 10px; flex-direction: row; align-items: center; justify-content: space-between; }
   }
 </style>
 </head>
@@ -1368,19 +1379,25 @@ function render() {
           </div>
           <div class="card-grade">${f.grade}</div>
         </div>
-        <div class="card-pills">
-          ${f.types.map(t=>`<span class="pill type">${t}</span>`).join('')}
-          ${f.sizes.map(s=>`<span class="pill env">${s}</span>`).join('')}
-          ${f.materials.map(m=>`<span class="pill mat">${m}</span>`).join('')}
-          ${(f.load||[]).map(l=>`<span class="pill load">${l}</span>`).join('')}
-          ${(f.vib||[]).map(v=>`<span class="pill vib">${v}</span>`).join('')}
-          ${f.priorities.map(p=>`<span class="pill warn">${p}</span>`).join('')}
-          ${(f.finishes||[]).map(fn=>{ const m=FINISH_META[fn]||{}; return `<span class="pill finish"><span class="pill-dot" style="background:${m.color||'#888'};border:1px solid rgba(255,255,255,0.15)"></span>${m.label||fn}</span>`; }).join('')}
-        </div>
-        <div class="card-desc">${f.desc}</div>
-        <div class="card-footer">
-          <div class="expand-hint">${isExp?'▲ collapse':'▼ details + failure modes'}</div>
-          <a class="mcmaster-btn" href="${mmUrl}" target="_blank" onclick="event.stopPropagation()">McMaster</a>
+        <div class="card-inner">
+          <div class="card-left">
+            <div class="card-desc">${f.desc}</div>
+          </div>
+          <div class="card-right">
+            <div class="card-pills">
+              ${f.types.map(t=>`<span class="pill type">${t}</span>`).join('')}
+              ${f.sizes.map(s=>`<span class="pill env">${s}</span>`).join('')}
+              ${f.materials.map(m=>`<span class="pill mat">${m}</span>`).join('')}
+              ${(f.load||[]).map(l=>`<span class="pill load">${l}</span>`).join('')}
+              ${(f.vib||[]).map(v=>`<span class="pill vib">${v}</span>`).join('')}
+              ${f.priorities.map(p=>`<span class="pill warn">${p}</span>`).join('')}
+              ${(f.finishes||[]).map(fn=>{ const m=FINISH_META[fn]||{}; return `<span class="pill finish"><span class="pill-dot" style="background:${m.color||'#888'};border:1px solid rgba(255,255,255,0.15)"></span>${m.label||fn}</span>`; }).join('')}
+            </div>
+            <div class="card-footer">
+              <a class="mcmaster-btn" href="${mmUrl}" target="_blank" onclick="event.stopPropagation()">McMaster</a>
+              <div class="expand-hint">${isExp?'▲ collapse':'▼ expand'}</div>
+            </div>
+          </div>
         </div>
         <div class="card-details">
           ${detailHtml}
