@@ -93,6 +93,15 @@
   [data-filter="finish"].tag.active { background: #1a1820; border-color: #605060; color: #c0a8c8; }
   [data-filter="finish"]:hover { border-color: #504050; color: #a888b8; }
 
+  [data-filter="load"].tag.active  { background: #141e20; border-color: #206878; color: #50b8c8; }
+  [data-filter="load"]:hover       { border-color: #185868; color: #40a0b0; }
+
+  [data-filter="vib"].tag.active   { background: #201414; border-color: #782020; color: #d07070; }
+  [data-filter="vib"]:hover        { border-color: #601818; color: #b05858; }
+
+  .pill.load { border-color: #20687844; color: #50b8c8; }
+  .pill.vib  { border-color: #78202044; color: #d07070; }
+
   .reset-btn { font-family: var(--mono); font-size: 10px; color: var(--text3); background: none; border: none; cursor: pointer; padding: 0; margin-top: 8px; letter-spacing: 0.06em; transition: color 0.12s; }
   .reset-btn:hover { color: var(--danger); }
 
@@ -259,11 +268,35 @@
       <div class="tag" data-filter="type" data-val="flat">Flat / countersunk</div>
       <div class="tag" data-filter="type" data-val="low-profile">Low-profile</div>
       <div class="tag" data-filter="type" data-val="shoulder">Shoulder bolt</div>
+      <div class="tag" data-filter="type" data-val="dowel-pin">Dowel pin</div>
+      <div class="tag" data-filter="type" data-val="set-screw">Set screw</div>
       <div class="tag" data-filter="type" data-val="standoff">Standoff / spacer</div>
       <div class="tag" data-filter="type" data-val="heat-set">Heat-set insert</div>
       <div class="tag" data-filter="type" data-val="self-tap">Self-tapping</div>
       <div class="tag" data-filter="type" data-val="stud">Stud / threaded rod</div>
       <div class="tag" data-filter="type" data-val="machine">Machine screw</div>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <div class="filter-label">Load type</div>
+    <div class="tags">
+      <div class="tag" data-filter="load" data-val="tension">Tension / clamp</div>
+      <div class="tag" data-filter="load" data-val="shear">Shear / lateral</div>
+      <div class="tag" data-filter="load" data-val="combined">Combined T+S</div>
+      <div class="tag" data-filter="load" data-val="locating">Locating only</div>
+      <div class="tag" data-filter="load" data-val="axial-retention">Axial retention (shaft)</div>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <div class="filter-label">Vibration behavior</div>
+    <div class="tags">
+      <div class="tag" data-filter="vib" data-val="locking-required">Locking required</div>
+      <div class="tag" data-filter="vib" data-val="locking-optional">Locking optional</div>
+      <div class="tag" data-filter="vib" data-val="vibration-immune">Vibration immune</div>
+      <div class="tag" data-filter="vib" data-val="self-loosening">Self-loosening risk</div>
+      <div class="tag" data-filter="vib" data-val="high-damping">High damping</div>
     </div>
   </div>
 
@@ -673,6 +706,19 @@ const MM_URLS = {
   // Machine screws
   'machine-nylon': 'https://www.mcmaster.com/screws/material~nylon/screws-2~/nylon-screws~~/',
   'machine-brass': 'https://www.mcmaster.com/screws/material~brass/screws-2~/brass-screws~~/',
+  // Dowel pins
+  'dowel-steel':  'https://www.mcmaster.com/dowel-pins/material~alloy-steel/dowel-pins-2~/hardened-alloy-steel-dowel-pins~~/',
+  'dowel-ss':     'https://www.mcmaster.com/dowel-pins/material~stainless-steel/dowel-pins-2~/stainless-steel-dowel-pins~~/',
+  'dowel-spring': 'https://www.mcmaster.com/slotted-spring-pins/material~steel/spring-pins-2~/steel-slotted-spring-pins~~/',
+  // Set screws
+  'setscrew-cup':  'https://www.mcmaster.com/set-screws/point-style~cup/material~alloy-steel/set-screws-2~/steel-cup-point-set-screws~~/',
+  'setscrew-cone': 'https://www.mcmaster.com/set-screws/point-style~cone/material~alloy-steel/set-screws-2~/steel-cone-point-set-screws~~/',
+  'setscrew-flat': 'https://www.mcmaster.com/set-screws/point-style~flat/material~alloy-steel/set-screws-2~/steel-flat-point-set-screws~~/',
+  'setscrew-ss':   'https://www.mcmaster.com/set-screws/point-style~cup/material~stainless-steel/set-screws-2~/stainless-steel-cup-point-set-screws~~/',
+  // Additional variants
+  'shcs-al':   'https://www.mcmaster.com/socket-head-screws/material~aluminum/socket-head-screws-2~/aluminum-socket-head-screws~~/',
+  'flat-ss':   'https://www.mcmaster.com/flat-head-screws/material~stainless-steel/socket-head-screws-2~/stainless-steel-flat-head-screws~~/',
+  'bhcs-ti':   'https://www.mcmaster.com/button-head-screws/material~titanium/socket-head-screws-2~/titanium-button-head-screws~~/',
 };
 
 // ─── Material dot colors ───────────────────────────────────────────────────
@@ -704,6 +750,8 @@ const FASTENERS = [
       'Thread in aluminum':['Min 1.5× diameter engagement','Consider Helicoil for M6+ in thin aluminum','Tap to H2 tolerance for clean engagement'],
     },
     finishes:['black-oxide','zinc-clear','zinc-yellow','ptfe-coat'],
+    load:['tension','combined'],
+    vib:['locking-required'],
     failures:['Stripping aluminum threads — use inserts for M6+, min 1.5× engagement','Backing out under vibration — Loctite 243 on all structural joints','Using in stainless substrate without anti-seize — galling'],
   },
   {
@@ -722,6 +770,8 @@ const FASTENERS = [
       'Galling prevention':['Always lubricate with anti-seize or PTFE paste','Never spin in dry','For M8+ consider A4-80 or duplex'],
     },
     finishes:['silver','passivated','ptfe-coat'],
+    load:['tension','combined'],
+    vib:['locking-required'],
     failures:['Galling during installation — seizes before reaching torque, thread damage','Overestimating strength vs alloy steel — A4-70 proof load is ~60% of 12.9','Mixing 304 and 316 hardware in same joint'],
   },
   {
@@ -740,6 +790,8 @@ const FASTENERS = [
       'Sourcing':['McMaster-Carr stocks M4–M12 and #10–1/2"','Titanium Joe, Aircraft Spruce for specialty sizes','Lead time can be 2–3 weeks for unusual sizes'],
     },
     finishes:['silver','ptfe-coat'],
+    load:['tension','combined'],
+    vib:['locking-required'],
     failures:['Severe galling — always use dry-film PTFE or Loctite 243 (cure prevents galling)','Driving too fast — use low-speed torque driver, never impact','Not magnetic — cannot be found with magnetic sweeps'],
   },
   {
@@ -758,6 +810,8 @@ const FASTENERS = [
       'Limitations':['Lower torque capacity — not for structural joints over ~15 N·m','Hex key engagement is shallower — cam-out risk if over-torqued'],
     },
     finishes:['black-oxide','zinc-clear'],
+    load:['tension'],
+    vib:['locking-required'],
     failures:['Cam-out stripping the socket when over-driven — use torque limiter','Using as structural bolt — not rated for it','Substituting for SHCS in high-load joints'],
   },
   {
@@ -776,6 +830,8 @@ const FASTENERS = [
       'With carbon fiber':['Use nylon or PTFE washer under head to prevent galvanic contact','Check that CF ply orientation doesn\'t split under head bearing area'],
     },
     finishes:['silver','passivated'],
+    load:['tension'],
+    vib:['locking-required'],
     failures:['Galling in stainless tapped holes — use anti-seize','Over-torquing small socket — M3 and under strip easily in 304 SS'],
   },
 
@@ -796,6 +852,8 @@ const FASTENERS = [
       'Countersink tips':['Countersink depth = exactly flush or 0.1 mm below surface','Use countersink gauge or depth micrometer to verify','Aluminum: use carbide countersink — cobalt HSS work hardens surface'],
     },
     finishes:['black-oxide','zinc-clear','zinc-yellow'],
+    load:['tension','combined'],
+    vib:['locking-required'],
     failures:['Rocking due to undersized countersink — always cut to depth','Head pullthrough in thin aluminum — minimum 2mm plate thickness for M4','Wrong countersink angle — 82° and 90° are not interchangeable'],
   },
 
@@ -816,6 +874,8 @@ const FASTENERS = [
       'Drive key':['Uses a through-hole in the head — can be driven from beneath with long key','Useful for blind installations'],
     },
     finishes:['black-oxide','zinc-clear'],
+    load:['tension','combined'],
+    vib:['locking-required'],
     failures:['Torquing with a short key arm — insufficient leverage for full preload','Confusing with standard SHCS in assembly — color-code or physically separate hardware bins'],
   },
 
@@ -836,6 +896,8 @@ const FASTENERS = [
       'Design rules':['Clearance fit in moving part, threaded engagement in fixed part','Shoulder must be longer than the floating component thickness','Never substitute with a regular bolt — no precision diameter'],
     },
     finishes:['black-oxide','zinc-clear'],
+    load:['shear','combined'],
+    vib:['locking-optional'],
     failures:['Using a regular SHCS as a pivot — shank is not ground, loose fit causes slop and wear','Thread bottoming before shoulder seats — counterbore depth must match shoulder length','Insufficient shoulder engagement length — shoulder should span full bearing surface'],
   },
   {
@@ -854,6 +916,8 @@ const FASTENERS = [
       'Bushing pairings':['Igus iglide J for low load, dry running','PTFE-lined bronze for higher loads','Oil-impregnated sintered bronze for continuous rotation'],
     },
     finishes:['silver','passivated'],
+    load:['shear','combined'],
+    vib:['locking-optional'],
     failures:['Galling at pivot interface — always use a bushing or bearing','Corrosion seizing the shoulder in the bore — apply anti-seize on assembly'],
   },
 
@@ -874,6 +938,8 @@ const FASTENERS = [
       'Torque guidance':['M2.5 FF standoff: 0.2–0.3 N·m max into PCB','Nylon washer under head prevents PCB trace damage','Hand-tight + quarter turn is a reliable field method for M3 and under'],
     },
     finishes:['silver','anodized'],
+    load:['tension'],
+    vib:['locking-optional'],
     failures:['Over-torquing M2/M2.5 into PCB — pulls barrel nut inserts, cracks boards','Mixing thread pitches — M2.5 and M3 look similar, standardize one size per bay','Using steel screws into aluminum standoffs without anti-seize — galvanic corrosion in outdoor robots'],
   },
   {
@@ -892,6 +958,8 @@ const FASTENERS = [
       'Imperial note':['4-40 and 6-32 standoffs common for legacy PCB hole patterns','M2.5 and M3 are modern standard — use metric for new designs'],
     },
     finishes:['silver','passivated','nickel'],
+    load:['tension'],
+    vib:['locking-optional'],
     failures:['303 SS corrodes faster than 316 in marine/wet — specify 316 for outdoor','Over-torquing into plastic standoff nuts — always use metal back nut'],
   },
 
@@ -912,6 +980,8 @@ const FASTENERS = [
       'Robotics use cases':['3D-printed electronics enclosures','Custom sensor brackets','Gripper finger bodies','Any printed part with >3 assembly/disassembly cycles'],
     },
     finishes:['gold'],
+    load:['tension'],
+    vib:['locking-optional'],
     failures:['Installing too hot — melts excess plastic into threads, fills bore','Installing too cold — insert sits proud, breaks free under load','Using printed threads directly for anything load-bearing — never do this for structural joints','Placing too close to edge — min 2× insert OD from part edge'],
   },
   {
@@ -930,6 +1000,8 @@ const FASTENERS = [
       'Installation':['Requires higher iron temp — 260–280°C for Nylon','Press square to surface — use alignment jig or guide'],
     },
     finishes:['zinc-clear','zinc-yellow'],
+    load:['tension'],
+    vib:['locking-optional'],
     failures:['Installing at brass temp in nylon — under-bonded, pulls out under load','Driving fastener torque beyond 60% proof load in printed substrate — cracks the boss'],
   },
 
@@ -950,6 +1022,8 @@ const FASTENERS = [
       'Hole size critical':['Use undersized pilot hole — too large = stripped on first install','Aluminum: drill to ~75% of nominal diameter','Plastic / Delrin: ~70%'],
     },
     finishes:['passivated','silver'],
+    load:['tension'],
+    vib:['self-loosening'],
     failures:['Re-using self-tapping in same hole — threads wear after ~3 cycles, use machine screw insert','Over-driving — torque drops suddenly after breakthrough, stop immediately','Using in SHCS structural holes — self-tapping threads loosen under vibration'],
   },
 
@@ -970,6 +1044,8 @@ const FASTENERS = [
       'Locking the stud':['Loctite 271 or 243 in the tapped hole before installing stud','Jam nut method for field-removable applications'],
     },
     finishes:['black-oxide','zinc-clear','hot-dip'],
+    load:['tension'],
+    vib:['locking-required'],
     failures:['Stud backing out with nut — use Loctite 243 in stud end thread always','Thread engagement too short in aluminum — use full-thread depth, min 1.5× diameter','Mixing stud and bolt patterns — NEMA stud patterns are fixed, don\'t improvise'],
   },
 
@@ -990,6 +1066,8 @@ const FASTENERS = [
       'Limitations':['Max torque ~0.3 N·m (M3) before head shears','Not suitable for any structural or load-bearing joint','Brittle at low temperatures'],
     },
     finishes:['silver'],
+    load:['tension'],
+    vib:['high-damping'],
     failures:['Using in structural joint — will fail under any real load','Over-torquing — nylon shears with no warning','Thread galling even in nylon-to-nylon — use slightly different polymer for nut vs bolt'],
   },
   {
@@ -1008,7 +1086,215 @@ const FASTENERS = [
       'With carbon fiber':['Brass is galvanically compatible with carbon fiber — use brass hardware directly against CF laminate','Preferred over aluminum for CF bonded inserts'],
     },
     finishes:['gold','nickel','zinc-clear'],
+    load:['tension'],
+    vib:['locking-optional'],
     failures:['Using where conductivity is a hazard — always check circuit topology','Work-hardening threads on repeated assembly — replace after ~10 cycles'],
+  },
+
+  // ── Dowel pins ──
+  {
+    id:'dowel-steel',
+    title:'Dowel pin — hardened alloy steel',
+    grade:'ISO 8734 · h6 / DIN 6325',
+    types:['dowel-pin'],
+    substrates:['al-plate','steel','cf'],
+    sizes:['small','medium'],
+    materials:['steel'],
+    priorities:['precision','strength'],
+    desc:'Ground cylindrical pin pressed into reamed holes for repeatable, precise part location. Absorbs all shear load so fasteners only carry tension — the correct way to design a joint that must be disassembled and reassembled to the same position. Standard in gearbox housings, motor mounts, and any joint with re-assembly accuracy requirements.',
+    details:{
+      'Specifications':['ISO 8734 (interference fit, hardened)','DIN 6325 (tighter tolerance)','Tolerance h6 standard; m6 for light press; n6 for heavy press','Hardness 60–64 HRC','Diameter range: 1–50mm off-the-shelf'],
+      'Robotics use cases':['Gearbox housing alignment','Motor face datum location','Repeatable fixture tooling','Any joint disassembled more than once with alignment requirements','Carbon fiber plate sandwich stacking'],
+      'Hole preparation':['Ream to H7 for light press; H6 for interference','Use spiral flute reamer in aluminum — HSS or carbide','Chamfer hole entry 0.3×45° for pin start','Never use a drill hole alone — drill wanders ±0.1mm, ruins location'],
+    },
+    finishes:['black-oxide','silver'],
+    load:['shear','locating'],
+    vib:['vibration-immune'],
+    failures:['Drilling instead of reaming — hole is undersized/oversized and out-of-round','Using in aluminum without reaming — pin galls and seizes, impossible to remove','Forgetting to chamfer — pin shears the hole entry lip on press-in','Over-specifying diameter — M4 dowel in M4 clearance hole is wrong; use M4 dowel in 4H7 reamed hole'],
+  },
+  {
+    id:'dowel-ss',
+    title:'Dowel pin — stainless steel',
+    grade:'ISO 8734 · A1 / 303 SS',
+    types:['dowel-pin'],
+    substrates:['al-plate','cf','steel'],
+    sizes:['small','medium'],
+    materials:['ss'],
+    priorities:['precision','reuse'],
+    desc:'Stainless dowel for corrosion-resistant locating applications. Lower hardness than alloy steel — not suitable for high-shear or high-cycle impact. Preferred in wet environments, food-contact robots, and CF/aluminum joints where galvanic isolation matters.',
+    details:{
+      'Specifications':['ISO 8734 A1 (303 SS)','316 SS available for marine','Hardness ~30 HRC — softer than steel, check shear allowable'],
+      'Robotics use cases':['Outdoor robot alignment features','Aquatic robot structural joints','CF plate to aluminum mount alignment','End-effector tooling plates'],
+      'Galvanic note':['303/316 SS against aluminum is low-risk galvanically','316 SS against CF is acceptable with isolation washer on fasteners','Bare aluminum reamed hole against SS pin — anodize the hole bore if outdoor'],
+    },
+    finishes:['silver','passivated'],
+    load:['shear','locating'],
+    vib:['vibration-immune'],
+    failures:['Using 303 SS in high-shear impact applications — yields at lower load than alloy steel','Galling during removal in tight-tolerance stainless-to-stainless — use 303 vs 316 or add PTFE film'],
+  },
+  {
+    id:'dowel-spring',
+    title:'Spring / roll pin — slotted steel',
+    grade:'ISO 8752 / DIN 1481',
+    types:['dowel-pin'],
+    substrates:['al-plate','steel','printed'],
+    sizes:['tiny','small','medium'],
+    materials:['steel'],
+    priorities:['cost','reuse'],
+    desc:'Hollow slotted cylinder that compresses during installation, providing a tight fit without a reamed hole. Cheaper and more forgiving than solid dowels — tolerates drilled (not reamed) holes. Absorbs shock through compliance. Widely used in robot linkages, hinge pivots, and any location needing a removable pin without precision tooling.',
+    details:{
+      'Specifications':['ISO 8752 heavy duty; ISO 13337 light duty','Phosphate + oil standard; SS available','Diameter range: 1–25mm'],
+      'Robotics use cases':['Quick-release mechanism pivots','Hinge pins on access doors','Linkage pins that need occasional removal','Shaft-to-hub keys in low-torque applications'],
+      'vs solid dowel':['Roll pin: no reaming required, removable, cheaper, lower location accuracy (±0.05mm)','Solid dowel: requires reaming, higher accuracy (±0.005mm), not for repeated removal'],
+    },
+    finishes:['black-oxide','zinc-clear'],
+    load:['shear','locating'],
+    vib:['vibration-immune'],
+    failures:['Using as a precision locating feature — roll pin has too much compliance for tight tolerance','Driving in without a starter chamfer — splits the slot, permanent deformation','Reusing after plastic deformation — replace every removal in critical joints'],
+  },
+
+  // ── Set screws ──
+  {
+    id:'setscrew-cup',
+    title:'Set screw — cup point, alloy steel',
+    grade:'ISO 4029 / DIN 916 · 45H',
+    types:['set-screw'],
+    substrates:['al-plate','steel'],
+    sizes:['tiny','small','medium'],
+    materials:['steel'],
+    priorities:['axial-retention','strength'],
+    desc:'Most common set screw for shaft retention. The hardened cup point bites into the shaft surface, resisting both axial and rotational movement. Standard on pulleys, sprockets, couplings, and encoder wheels. Always use two set screws 90° apart on shafts over 6mm.',
+    details:{
+      'Specifications':['ISO 4029 (cup point)','45H property class (hardened)','DIN 913 flat point; DIN 914 cone point; DIN 916 hex socket cup — use 4029 as default','Hex key socket — M3=1.5mm, M4=2mm, M5=2.5mm, M6=3mm'],
+      'Robotics use cases':['Pulley and sprocket retention on motor shafts','Encoder wheel shaft mounting','Couplings between motor and gearbox','Collar retention on shafts'],
+      'Best practice':['Use two set screws 90° apart for anti-rotation','Apply Loctite 243 — vibration loosens set screws faster than any other fastener','Flat on shaft improves retention 3× over round shaft — add a flat when possible','Engagement depth = 1× diameter minimum'],
+    },
+    finishes:['black-oxide'],
+    load:['axial-retention'],
+    vib:['locking-required'],
+    failures:['Single set screw — rotates off-position under torque load','No Loctite — backs out after first load cycle in almost every robotics application','Overtightening on soft aluminum or plastic shaft — cup point penetrates through wall','Using on hardened shaft without a flat — set screw skates, zero retention'],
+  },
+  {
+    id:'setscrew-cone',
+    title:'Set screw — cone point, alloy steel',
+    grade:'ISO 4027 / DIN 914 · 45H',
+    types:['set-screw'],
+    substrates:['al-plate','steel'],
+    sizes:['tiny','small','medium'],
+    materials:['steel'],
+    priorities:['axial-retention','strength'],
+    desc:'Conical point penetrates deeper into shaft than cup point — higher axial and torque retention but damages shaft surface permanently. Use when the shaft will never need re-positioning. Common in set-and-forget couplings and permanent encoder mounts.',
+    details:{
+      'Specifications':['ISO 4027 (cone point)','45H hardened','Cone angle 90°','Same hex key sizing as cup point'],
+      'Robotics use cases':['Permanent coupling on motor output shaft','Set-once encoder wheels','High-torque shaft-hub joints where shaft re-use is acceptable'],
+      'vs cup point':['Cone: higher holding torque, shaft permanently dimpled — cannot reposition','Cup: lower holding torque, shaft re-positionable with light surface marking'],
+    },
+    finishes:['black-oxide'],
+    load:['axial-retention'],
+    vib:['locking-required'],
+    failures:['Repositioning after cone point engagement — shaft surface torn, runout increases','Using on hollow thin-wall shaft — cone collapses the wall'],
+  },
+  {
+    id:'setscrew-flat',
+    title:'Set screw — flat point, alloy steel',
+    grade:'ISO 4026 / DIN 913 · 45H',
+    types:['set-screw'],
+    substrates:['al-plate','steel'],
+    sizes:['tiny','small','medium'],
+    materials:['steel'],
+    priorities:['axial-retention','reuse'],
+    desc:'Flat ground end applies clamping pressure without penetrating the shaft. No marring — use when the shaft must remain undamaged, or when pressing against hardened shafts. Lower axial retention than cup/cone unless used against a machined flat.',
+    details:{
+      'Specifications':['ISO 4026 (flat point)','45H hardened','Lowest retention force of the set screw family without a flat on shaft'],
+      'Robotics use cases':['Adjustable collars on hardened linear shafts','Soft shaft surfaces that must remain unmarked','Adjustment screws on mechanism stops','Against precision ground shaft surfaces'],
+      'When to choose':['Hardened shaft: flat point is the only option that doesn\'t damage the surface','Reposition frequently: flat point does not accumulate damage like cup/cone'],
+    },
+    finishes:['black-oxide'],
+    load:['axial-retention'],
+    vib:['locking-required'],
+    failures:['Using without a shaft flat expecting high torque retention — it will slip','Not using Loctite — flat point has least grip, most prone to backing out'],
+  },
+  {
+    id:'setscrew-ss',
+    title:'Set screw — stainless steel, cup point',
+    grade:'ISO 4029 · A2-70',
+    types:['set-screw'],
+    substrates:['al-plate','steel'],
+    sizes:['tiny','small','medium'],
+    materials:['ss'],
+    priorities:['axial-retention','reuse'],
+    desc:'Stainless set screw for corrosion-resistant shaft retention. Softer than alloy steel — cup point penetration depth is lower, reducing holding force by ~20-30%. Apply anti-seize or PTFE paste to threads before installation to prevent galling.',
+    details:{
+      'Specifications':['ISO 4029 A2-70','Not available in 12.9 equivalent — A2-70 is the stainless ceiling for this form factor'],
+      'Robotics use cases':['Wet environment pulley retention','Aquatic robot shaft collars','Stainless shaft assemblies'],
+      'Galling warning':['Stainless set screws in stainless tapped holes will gall and seize immediately without lubrication','Use Loctite 243 (also lubricates) or PTFE thread tape as assembly lubricant','Replace seized set screws — do not attempt to force removal'],
+    },
+    finishes:['silver','passivated'],
+    load:['axial-retention'],
+    vib:['locking-required'],
+    failures:['Dry installation in stainless tapped hole — galls and seizes on first torque','Expecting alloy steel retention force from stainless — spec accordingly'],
+  },
+
+  // ── Additional screw variants ──
+  {
+    id:'shcs-al',
+    title:'Socket head cap screw — aluminum',
+    grade:'7075-T6 / 2024-T4',
+    types:['shcs'],
+    substrates:['al-plate','al-extrusion','cf'],
+    sizes:['small','medium'],
+    materials:['al'],
+    priorities:['weight','cost'],
+    desc:'Aluminum SHCS for non-structural or weight-critical joints where clamp force requirements are modest. Roughly 1/3 the weight of steel equivalents at about 35% the strength. Common in competition robots where every gram matters and joints are not load-bearing.',
+    details:{
+      'Specifications':['7075-T6 for highest aluminum strength','2024-T4 for better fatigue resistance','Proof load ~35% of equivalent steel grade — verify joint margins'],
+      'Robotics use cases':['Access panel fasteners on competition robots','Non-structural cover plates','Cable routing hardware','Weight-reduction substitution on proven joints'],
+      'Weight savings':['M4×12 steel SHCS: ~1.4g  →  Al: ~0.5g','36 fasteners × 0.9g saved = 32g — meaningful at competition weight limits'],
+    },
+    finishes:['silver','anodized'],
+    load:['tension'],
+    vib:['locking-required'],
+    failures:['Using in structural joints — strips threads and yields under real loads','Thread engagement into steel nut: acceptable — into aluminum tapped hole: both sides now weak, reduce torque 50%','Anodizing hides cracks — inspect visually before critical use'],
+  },
+  {
+    id:'flat-ss',
+    title:'Flat head / countersunk — stainless',
+    grade:'ISO 10642 · A2-70',
+    types:['flat'],
+    substrates:['al-plate','cf','printed'],
+    sizes:['tiny','small','medium'],
+    materials:['ss'],
+    priorities:['clearance','reuse'],
+    desc:'Stainless countersunk screw for flush-mount joints in corrosion-exposed or cosmetic assemblies. Essential for carbon fiber plates where a protruding head would catch cable or interfere with adjacent mechanisms.',
+    details:{
+      'Specifications':['ISO 10642 A2-70','82° countersink standard','Passivated finish'],
+      'Robotics use cases':['CF plate mounting to aluminum frame','Outdoor robot panel joints','Flush-mount sensor plates','End-effector structural laminate'],
+      'CF specific':['Countersink in CF must be cut with carbide — HSS work-hardens the surface','CF delamination risk at countersink if angle is wrong — use 100° countersink for CF plate','PTFE or nylon washer under flush surfaces to prevent galvanic at CF-SS interface'],
+    },
+    finishes:['silver','passivated'],
+    load:['tension','combined'],
+    vib:['locking-required'],
+    failures:['Countersinking CF plate without carbide tooling — rough surface, delamination starts at hole','Undersized countersink depth — head rocks, joint clamps inconsistently'],
+  },
+  {
+    id:'bhcs-ti',
+    title:'Button head cap screw — titanium',
+    grade:'Ti-6Al-4V / AMS 4928',
+    types:['button'],
+    substrates:['al-plate','cf'],
+    sizes:['tiny','small','medium'],
+    materials:['ti'],
+    priorities:['weight','clearance'],
+    desc:'Titanium button head for the lowest-profile, lowest-weight screw option. Same head geometry benefits as alloy steel button head — low snag profile, accessible from one side — but at 55% of the mass. Found on high-end competition robot covers, sensor mounts, and CF/aluminum panels.',
+    details:{
+      'Specifications':['Ti-6Al-4V ELI','AMS 4928 basis','Lower torque capacity than SHCS — same as alloy steel button head limit'],
+      'Robotics use cases':['Competition robot exterior panels','Drone / UAV enclosure fastening','CF plate mounting in weight-critical applications'],
+      'Sourcing':['Less common than Ti SHCS — check Titanium Joe, Bolt Depot, AircraftSpruce for stock','Lead time 1–3 weeks for unusual sizes'],
+    },
+    finishes:['silver'],
+    load:['tension'],
+    vib:['locking-required'],
+    failures:['Galling — always use Loctite 243 or PTFE thread compound','Cam-out at socket — same risk as steel button head, amplified by galling'],
   },
 ];
 
@@ -1026,7 +1312,7 @@ const FINISH_META = {
 };
 
 
-const active = { type:null, substrate:null, size:null, material:null, priority:null, finish:null };
+const active = { type:null, substrate:null, size:null, material:null, priority:null, finish:null, load:null, vib:null };
 let expandedId = null;
 
 function matches(f) {
@@ -1036,6 +1322,8 @@ function matches(f) {
   if (active.material  && !f.materials.includes(active.material))   return false;
   if (active.priority  && !f.priorities.includes(active.priority))  return false;
   if (active.finish    && !(f.finishes||[]).includes(active.finish)) return false;
+  if (active.load      && !(f.load||[]).includes(active.load))       return false;
+  if (active.vib       && !(f.vib||[]).includes(active.vib))         return false;
   return true;
 }
 
@@ -1084,6 +1372,8 @@ function render() {
           ${f.types.map(t=>`<span class="pill type">${t}</span>`).join('')}
           ${f.sizes.map(s=>`<span class="pill env">${s}</span>`).join('')}
           ${f.materials.map(m=>`<span class="pill mat">${m}</span>`).join('')}
+          ${(f.load||[]).map(l=>`<span class="pill load">${l}</span>`).join('')}
+          ${(f.vib||[]).map(v=>`<span class="pill vib">${v}</span>`).join('')}
           ${f.priorities.map(p=>`<span class="pill warn">${p}</span>`).join('')}
           ${(f.finishes||[]).map(fn=>{ const m=FINISH_META[fn]||{}; return `<span class="pill finish"><span class="pill-dot" style="background:${m.color||'#888'};border:1px solid rgba(255,255,255,0.15)"></span>${m.label||fn}</span>`; }).join('')}
         </div>
