@@ -56,6 +56,31 @@
     --col-nylon-border: #3a3050;
     --col-nylon-accent: #9070c8;
     --col-nylon-muted: #483060;
+
+    --col-ph-bg: #1a1c1e;
+    --col-ph-border: #304858;
+    --col-ph-accent: #48a0c8;
+    --col-ph-muted: #204060;
+
+    --col-mild-bg: #181818;
+    --col-mild-border: #383830;
+    --col-mild-accent: #989070;
+    --col-mild-muted: #504840;
+
+    --col-peek-bg: #1c1a16;
+    --col-peek-border: #504828;
+    --col-peek-accent: #c8a848;
+    --col-peek-muted: #604820;
+
+    --col-monel-bg: #181c1e;
+    --col-monel-border: #284848;
+    --col-monel-accent: #40b0a0;
+    --col-monel-muted: #205048;
+
+    --col-hardened-bg: #1a1820;
+    --col-hardened-border: #402838;
+    --col-hardened-accent: #b86890;
+    --col-hardened-muted: #582040;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 13px; line-height: 1.5; }
@@ -169,6 +194,31 @@
   .card[data-mat="nylon"]::before  { background: var(--col-nylon-accent); }
   .card[data-mat="nylon"]:hover  { border-color: var(--col-nylon-accent); }
   .card[data-mat="nylon"].expanded { border-color: var(--col-nylon-accent); }
+
+  .card[data-mat="ph"]  { background: var(--col-ph-bg); border-color: var(--col-ph-border); }
+  .card[data-mat="ph"]::before  { background: var(--col-ph-accent); }
+  .card[data-mat="ph"]:hover  { border-color: var(--col-ph-accent); }
+  .card[data-mat="ph"].expanded { border-color: var(--col-ph-accent); }
+
+  .card[data-mat="mild-steel"]  { background: var(--col-mild-bg); border-color: var(--col-mild-border); }
+  .card[data-mat="mild-steel"]::before  { background: var(--col-mild-accent); }
+  .card[data-mat="mild-steel"]:hover  { border-color: var(--col-mild-accent); }
+  .card[data-mat="mild-steel"].expanded { border-color: var(--col-mild-accent); }
+
+  .card[data-mat="peek"]  { background: var(--col-peek-bg); border-color: var(--col-peek-border); }
+  .card[data-mat="peek"]::before  { background: var(--col-peek-accent); }
+  .card[data-mat="peek"]:hover  { border-color: var(--col-peek-accent); }
+  .card[data-mat="peek"].expanded { border-color: var(--col-peek-accent); }
+
+  .card[data-mat="monel"]  { background: var(--col-monel-bg); border-color: var(--col-monel-border); }
+  .card[data-mat="monel"]::before  { background: var(--col-monel-accent); }
+  .card[data-mat="monel"]:hover  { border-color: var(--col-monel-accent); }
+  .card[data-mat="monel"].expanded { border-color: var(--col-monel-accent); }
+
+  .card[data-mat="hardened"]  { background: var(--col-hardened-bg); border-color: var(--col-hardened-border); }
+  .card[data-mat="hardened"]::before  { background: var(--col-hardened-accent); }
+  .card[data-mat="hardened"]:hover  { border-color: var(--col-hardened-accent); }
+  .card[data-mat="hardened"].expanded { border-color: var(--col-hardened-accent); }
 
   .card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
   .card-title-row { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
@@ -366,6 +416,23 @@
   </div>
 
   <div class="filter-section">
+    <div class="filter-label">Material</div>
+    <div class="tags">
+      <div class="tag" data-filter="material" data-val="steel">Alloy steel</div>
+      <div class="tag" data-filter="material" data-val="mild-steel">Carbon steel (mild)</div>
+      <div class="tag" data-filter="material" data-val="hardened">Hardened steel</div>
+      <div class="tag" data-filter="material" data-val="ss">Stainless (304/316)</div>
+      <div class="tag" data-filter="material" data-val="ph">17-4 PH stainless</div>
+      <div class="tag" data-filter="material" data-val="monel">Monel 400</div>
+      <div class="tag" data-filter="material" data-val="al">Aluminum</div>
+      <div class="tag" data-filter="material" data-val="ti">Titanium</div>
+      <div class="tag" data-filter="material" data-val="brass">Brass</div>
+      <div class="tag" data-filter="material" data-val="peek">PEEK</div>
+      <div class="tag" data-filter="material" data-val="nylon">Nylon / plastic</div>
+    </div>
+  </div>
+
+  <div class="filter-section">
     <div class="filter-label">Load type</div>
     <div class="tags">
       <div class="tag" data-filter="load" data-val="tension">Tension / clamp</div>
@@ -407,18 +474,6 @@
       <div class="tag" data-filter="size" data-val="small">M4–M5 (light structure)</div>
       <div class="tag" data-filter="size" data-val="medium">M6–M8 (main structure)</div>
       <div class="tag" data-filter="size" data-val="large">M10–M16 (heavy loads)</div>
-    </div>
-  </div>
-
-  <div class="filter-section">
-    <div class="filter-label">Material</div>
-    <div class="tags">
-      <div class="tag" data-filter="material" data-val="steel">Alloy steel</div>
-      <div class="tag" data-filter="material" data-val="ss">Stainless</div>
-      <div class="tag" data-filter="material" data-val="al">Aluminum</div>
-      <div class="tag" data-filter="material" data-val="ti">Titanium</div>
-      <div class="tag" data-filter="material" data-val="brass">Brass</div>
-      <div class="tag" data-filter="material" data-val="nylon">Nylon / plastic</div>
     </div>
   </div>
 
@@ -488,11 +543,16 @@
   <div class="mat-legend">
     <span style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-right:4px;">Material</span>
     <div class="legend-item"><div class="legend-dot" style="background:var(--col-steel-accent)"></div>Alloy steel</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-mild-accent)"></div>Mild steel</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-hardened-accent)"></div>Hardened</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--col-ss-accent)"></div>Stainless</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-ph-accent)"></div>17-4 PH</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-monel-accent)"></div>Monel</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--col-ti-accent)"></div>Titanium</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--col-al-accent)"></div>Aluminum</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--col-brass-accent)"></div>Brass</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--col-nylon-accent)"></div>Nylon / plastic</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-peek-accent)"></div>PEEK</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--col-nylon-accent)"></div>Nylon</div>
   </div>
 
   <div class="cards" id="cards"></div>
@@ -826,16 +886,37 @@ const MM_URLS = {
   'shcs-al':   'https://www.mcmaster.com/socket-head-screws/material~aluminum/socket-head-screws-2~/aluminum-socket-head-screws~~/',
   'flat-ss':   'https://www.mcmaster.com/flat-head-screws/material~stainless-steel/socket-head-screws-2~/stainless-steel-flat-head-screws~~/',
   'bhcs-ti':   'https://www.mcmaster.com/button-head-screws/material~titanium/socket-head-screws-2~/titanium-button-head-screws~~/',
+  // 17-4 PH stainless
+  'shcs-ph':       'https://www.mcmaster.com/socket-head-screws/material~stainless-steel/stainless-steel-type~17-4/',
+  'shoulder-ph':   'https://www.mcmaster.com/shoulder-screws/material~stainless-steel/stainless-steel-type~17-4/',
+  'setscrew-ph':   'https://www.mcmaster.com/set-screws/material~stainless-steel/stainless-steel-type~17-4/',
+  // Mild / carbon steel
+  'shcs-mild':     'https://www.mcmaster.com/socket-head-screws/material~steel/property-class~8-8/',
+  'machine-mild':  'https://www.mcmaster.com/screws/material~steel/property-class~8-8/',
+  // PEEK
+  'shcs-peek':     'https://www.mcmaster.com/socket-head-screws/material~peek/',
+  'standoff-peek': 'https://www.mcmaster.com/hex-standoffs/material~peek/',
+  // Monel
+  'shcs-monel':    'https://www.mcmaster.com/socket-head-screws/material~monel/',
+  'machine-monel': 'https://www.mcmaster.com/screws/material~monel/',
+  // Hardened steel (dowel / set screw specific)
+  'dowel-hardened':'https://www.mcmaster.com/dowel-pins/material~alloy-steel/dowel-pins-2~/hardened-alloy-steel-dowel-pins~~/',
+  'setscrew-hardened':'https://www.mcmaster.com/set-screws/material~alloy-steel/',
 };
 
 // ─── Material dot colors ───────────────────────────────────────────────────
 const MAT_COLORS = {
-  steel: 'var(--col-steel-accent)',
-  ss:    'var(--col-ss-accent)',
-  ti:    'var(--col-ti-accent)',
-  al:    'var(--col-al-accent)',
-  brass: 'var(--col-brass-accent)',
-  nylon: 'var(--col-nylon-accent)',
+  steel:      'var(--col-steel-accent)',
+  ss:         'var(--col-ss-accent)',
+  ti:         'var(--col-ti-accent)',
+  al:         'var(--col-al-accent)',
+  brass:      'var(--col-brass-accent)',
+  nylon:      'var(--col-nylon-accent)',
+  ph:         'var(--col-ph-accent)',
+  'mild-steel':'var(--col-mild-accent)',
+  peek:       'var(--col-peek-accent)',
+  monel:      'var(--col-monel-accent)',
+  hardened:   'var(--col-hardened-accent)',
 };
 
 // ─── Fastener data ─────────────────────────────────────────────────────────
@@ -1403,6 +1484,234 @@ const FASTENERS = [
     vib:['locking-required'],
     failures:['Galling — always use Loctite 243 or PTFE thread compound','Cam-out at socket — same risk as steel button head, amplified by galling'],
   },
+
+  // ── 17-4 PH Stainless ──────────────────────────────────────────────────────
+  {
+    id:'shcs-ph',
+    title:'Socket head cap screw — 17-4 PH stainless',
+    grade:'ASTM A564 / H900',
+    types:['shcs'],
+    substrates:['al-plate','steel','cf','al-extrusion'],
+    sizes:['small','medium','large'],
+    materials:['ph'],
+    priorities:['strength','corrosion'],
+    desc:'Precipitation-hardened stainless with near-alloy-steel strength (~1240 MPa UTS at H900) and far better corrosion resistance than alloy steel. The go-to when you need Grade 12.9 strength in a stainless body — common in aerospace robotics, surgical robots, and field robots where alloy steel would corrode and 316 SS is too weak.',
+    details:{
+      'Specifications':['ASTM A564 Type 630 (17-4 PH)','H900: ~1240 MPa UTS (highest strength)','H1025/H1150: lower strength, better toughness and SCC resistance','No ISO 3506 direct equivalent — specify by ASTM'],
+      'Robotics use cases':['High-load joints in wet or outdoor environments','Surgical / food-contact robot structures','Marine robot load-bearing fasteners','Drivetrain joints where stainless is preferred over alloy steel'],
+      'vs alternatives':['vs 12.9 steel: comparable strength, 10× better corrosion resistance','vs 316 SS A4-80: 2× the strength at H900','vs Ti Grade 5: slightly heavier, lower cost, easier sourcing'],
+    },
+    finishes:['passivated','silver'],
+    load:['tension','combined'],
+    vib:['locking-required'],
+    failures:['H900 brittle in chloride SCC environments — use H1025 or H1150 for seawater','Galling still possible — use anti-seize or Loctite 243 on threads','Low-carbon versions may be slightly magnetic after aging — verify if magnetically sensitive'],
+  },
+  {
+    id:'shoulder-ph',
+    title:'Shoulder bolt — 17-4 PH stainless',
+    grade:'ASTM A564 / H900',
+    types:['shoulder'],
+    substrates:['al-plate','steel','cf'],
+    sizes:['small','medium'],
+    materials:['ph'],
+    priorities:['precision','strength','corrosion'],
+    desc:'High-strength stainless shoulder bolt for corrosion-resistant pivot applications. Harder shoulder than standard 316 SS — suitable for moderate-cycle wear pivots with a bushing. Best choice for outdoor linkage mechanisms where alloy steel would rust and 316 SS shoulder would wear prematurely.',
+    details:{
+      'Specifications':['17-4 PH condition H900 or H1025','Shoulder tolerance h6 (precision ground)','Less common than steel/316 SS — check specialty suppliers for stock'],
+      'Robotics use cases':['Outdoor robot four-bar linkages','Weather-exposed mechanism pivots','Field robot joint pins exposed to mud, water, impact'],
+      'Bushing note':['Use Igus iglide or PTFE-lined bronze bushing','Shoulder hardness directs wear to bushing rather than pin — replace bushings, not the bolt'],
+    },
+    finishes:['passivated','silver'],
+    load:['shear','combined'],
+    vib:['locking-optional'],
+    failures:['H900 brittleness under impact loading — use H1025 if shock loads expected','Stress corrosion cracking in chloride at H900 condition — switch to H1150 for marine exposure'],
+  },
+  {
+    id:'setscrew-ph',
+    title:'Set screw — 17-4 PH stainless, cup point',
+    grade:'ASTM A564 / H900',
+    types:['set-screw'],
+    substrates:['al-plate','steel'],
+    sizes:['tiny','small','medium'],
+    materials:['ph'],
+    priorities:['axial-retention','corrosion','strength'],
+    desc:'Stainless set screw with near-alloy-steel hardness. Eliminates the main weakness of A2-70 SS set screws — the cup point is hard enough to bite effectively into shafts without relying on shaft softness. Best for wet environments where standard alloy steel set screws would corrode and seize in the tapped hole.',
+    details:{
+      'Specifications':['17-4 PH H900 condition','Cup point standard; cone and flat on special order','Higher retention than A2-70, approaching alloy steel 45H'],
+      'Robotics use cases':['Outdoor robot pulley and sprocket retention','Marine robot shaft collars','Wet-environment couplings that must remain removable'],
+    },
+    finishes:['passivated','silver'],
+    load:['axial-retention'],
+    vib:['locking-required'],
+    failures:['Still requires Loctite 243 — vibration will loosen any set screw without locking','Anti-seize mandatory in stainless tapped holes — 17-4 PH will gall against stainless threads'],
+  },
+
+  // ── Mild / carbon steel ────────────────────────────────────────────────────
+  {
+    id:'shcs-mild',
+    title:'Socket head cap screw — mild carbon steel',
+    grade:'ISO 8.8 / SAE Grade 5',
+    types:['shcs'],
+    substrates:['steel','al-plate','al-extrusion'],
+    sizes:['small','medium','large'],
+    materials:['mild-steel'],
+    priorities:['cost'],
+    desc:'Low-alloy carbon steel at property class 8.8 — roughly 70% the strength of 12.9 at a fraction of the cost. Suitable for non-critical structural joints, prototyping, and applications where cost drives selection and margins have been verified. The most abundant and cheapest SHCS in any hardware catalogue.',
+    details:{
+      'Specifications':['ISO 898-1 Class 8.8','SAE Grade 5 imperial equivalent','Proof strength ~600 MPa (12.9: ~970 MPa)'],
+      'Robotics use cases':['Prototype assemblies where strength margins are not critical','One-time jig and fixture building','Budget competition robots with defined load margins'],
+      'When to upgrade':['Re-used joint: switch to 12.9 — 8.8 fatigues faster','Outdoor or wet: coat or switch to stainless','High-vibration drivetrain: upgrade to 12.9 + Loctite 243'],
+    },
+    finishes:['zinc-clear','zinc-yellow','black-oxide'],
+    load:['tension','combined'],
+    vib:['locking-required'],
+    failures:['Substituting for 12.9 in high-load joints without checking reduced margins','Rusting without coating in any humidity — mild steel corrodes faster than alloy steel','Thread stripping at lower torques than 12.9 — reduce target torque by ~15%'],
+  },
+  {
+    id:'machine-mild',
+    title:'Machine screw — mild carbon steel',
+    grade:'ISO 4.8 / SAE Grade 2',
+    types:['machine'],
+    substrates:['steel','al-plate','al-extrusion'],
+    sizes:['tiny','small','medium'],
+    materials:['mild-steel'],
+    priorities:['cost'],
+    desc:'The cheapest threaded fastener available. Property class 4.8 — suitable only for non-structural, low-load, or one-time assembly applications. Standard hardware-store bolt. Use for prototype fixtures, non-load-bearing covers, and anywhere cost matters more than performance or longevity.',
+    details:{
+      'Specifications':['ISO 898-1 Class 4.8','Proof strength ~310 MPa','Pan head, hex head, round head all common in this grade'],
+      'Robotics use cases':['Prototype fixtures and jigs','Non-load-bearing panel attachment','Cable routing brackets in dry indoor environments'],
+      'Limitations':['Never use in any structurally loaded joint','Never use outdoors without heavy coating — corrodes within days in humidity'],
+    },
+    finishes:['zinc-clear','zinc-yellow'],
+    load:['tension'],
+    vib:['self-loosening'],
+    failures:['Thread stripping at surprisingly low torques — 4.8 is very soft','Corrosion in any moisture — replace with stainless for anything beyond a dry lab'],
+  },
+
+  // ── PEEK ───────────────────────────────────────────────────────────────────
+  {
+    id:'shcs-peek',
+    title:'Socket head cap screw — PEEK',
+    grade:'ASTM D6262 / natural PEEK',
+    types:['shcs'],
+    substrates:['printed','pcb','delrin','cf'],
+    sizes:['tiny','small','medium'],
+    materials:['peek'],
+    priorities:['corrosion','weight','clearance'],
+    desc:'Polyether ether ketone fastener for chemical-resistance, high-temperature, or electrically-isolating applications. Continuous service to 250°C, resistant to nearly all solvents, acids, and bases. Non-conductive, non-magnetic. Used in chemical robots, high-temp fixtures, and MRI-compatible structures.',
+    details:{
+      'Specifications':['PEEK natural (tan) or PEEK-GF30 (glass-filled, stronger)','Tensile ~100 MPa natural / ~160 MPa GF30','Available M2–M8 standard; McMaster 93945A series'],
+      'Robotics use cases':['Chemical handling end-effectors','High-temp oven / kiln robot joints','Electrically-isolated PCB standoffs near high voltage','MRI-compatible robot structures','Aggressive cleaning chemical environments'],
+      'vs nylon':['PEEK: 250°C service, broad chemical resistance, 4× stronger, 3× cost','Nylon: 80–120°C service, limited chemical resistance, much cheaper'],
+    },
+    finishes:['silver'],
+    load:['tension'],
+    vib:['high-damping'],
+    failures:['Assuming PEEK strength approaches steel — 100 MPa vs 1200 MPa, always calculate margins','PEEK is notch-sensitive — avoid sharp undercuts and stress risers','Creep under sustained load at elevated temperature — use a metal insert for continuous-load joints'],
+  },
+  {
+    id:'standoff-peek',
+    title:'Hex standoff — PEEK',
+    grade:'McMaster 93920A series',
+    types:['standoff'],
+    substrates:['pcb','printed','cf'],
+    sizes:['tiny','small'],
+    materials:['peek'],
+    priorities:['corrosion','clearance'],
+    desc:'PEEK standoff for chemically aggressive, high-temperature, or high-voltage PCB mounting. Replaces stainless standoffs where metal conductivity, chemical attack, or magnetic interference is a concern. Standard in lab automation, analytical instruments, and wet-chemistry robots.',
+    details:{
+      'Specifications':['McMaster 93920A series','Female-female most common','M2, M2.5, M3, M4 stocked'],
+      'Robotics use cases':['PCB isolation in high-voltage drive electronics','Chemical robot electronics mounting','Any bay where a loose metal standoff causing a short would be catastrophic'],
+      'Torque':['M3 PEEK standoff: max ~0.4 N·m — treat like nylon, not metal','Hand-tight + quarter turn is the right install method'],
+    },
+    finishes:['silver'],
+    load:['tension'],
+    vib:['locking-optional'],
+    failures:['Over-torquing — PEEK standoffs crack without warning at low torques','Using in structural joints — PEEK standoffs are for light panel/PCB retention only'],
+  },
+
+  // ── Monel 400 ──────────────────────────────────────────────────────────────
+  {
+    id:'shcs-monel',
+    title:'Socket head cap screw — Monel 400',
+    grade:'ASTM B164 / AMS 4675',
+    types:['shcs'],
+    substrates:['steel','al-plate','cf'],
+    sizes:['small','medium','large'],
+    materials:['monel'],
+    priorities:['corrosion','strength'],
+    desc:'Nickel-copper alloy with outstanding resistance to seawater, hydrofluoric acid, and caustic environments where even 316 SS fails through stress-corrosion cracking. Lower strength than 316 SS but immune to chloride SCC — the failure mode that destroys stainless in true marine environments. Standard in subsea, offshore, and chemical process robotics.',
+    details:{
+      'Specifications':['ASTM B164 bar stock basis','AMS 4675 for aerospace','Tensile ~520 MPa (similar to SS A2-70)','Low magnetic permeability'],
+      'Robotics use cases':['Subsea and AUV vehicle fasteners','Offshore / tidal energy robot structures','Chemical plant robots in HF or NaOH environments','Applications where 316 SS has previously failed by pitting or SCC'],
+      'vs 316 SS':['Monel: immune to chloride SCC, better in HF acid, heavier (8.8 vs 8.0 g/cc)','316 SS: lower cost, higher strength, widely available — use Monel only where SS has failed'],
+    },
+    finishes:['silver','passivated'],
+    load:['tension','combined'],
+    vib:['locking-required'],
+    failures:['Specifying Monel where 316 SS is adequate — 5–10× the cost, reserve for environments where SS has demonstrated failure','Galvanic coupling with aluminum in seawater — use isolation hardware','Long procurement lead times — 2–4 weeks typical, plan ahead'],
+  },
+  {
+    id:'machine-monel',
+    title:'Machine screw — Monel 400',
+    grade:'ASTM B164',
+    types:['machine'],
+    substrates:['steel','al-plate','cf','pcb'],
+    sizes:['tiny','small','medium'],
+    materials:['monel'],
+    priorities:['corrosion'],
+    desc:'Monel machine screw for panel fastening, enclosure mounting, and non-structural joints in extreme corrosion environments. Preferred over SS in HF acid handling, chlorine gas environments, and deep-sea applications where 316 SS has demonstrated SCC failure.',
+    details:{
+      'Specifications':['ASTM B164','Pan head and hex head most common','McMaster stocks select sizes; specialty distributors for full range'],
+      'Robotics use cases':['Instrument enclosure panels on offshore platforms','HF and chlorine handling robot covers','Tidal energy and subsea assemblies'],
+    },
+    finishes:['silver'],
+    load:['tension'],
+    vib:['locking-required'],
+    failures:['Cost overrun — do not specify Monel for general outdoor use, 316 SS handles 99% of wet applications','Galling in Monel-to-Monel threads — always lubricate or use anti-seize'],
+  },
+
+  // ── Hardened steel ─────────────────────────────────────────────────────────
+  {
+    id:'dowel-hardened',
+    title:'Dowel pin — through-hardened alloy steel',
+    grade:'ISO 8734 Class A · 60–64 HRC',
+    types:['dowel-pin'],
+    substrates:['steel','al-plate'],
+    sizes:['tiny','small','medium'],
+    materials:['hardened'],
+    priorities:['precision','strength','vibration'],
+    desc:'Through-hardened to 60–64 HRC for maximum wear resistance in high-cycle, high-load pivot and locating applications. Tolerates repeated insertion and removal without bore galling. Standard in precision gearbox housings, high-cycle mechanisms, and any locating feature that must maintain accuracy over thousands of cycles.',
+    details:{
+      'Specifications':['ISO 8734 Class A (through-hardened)','60–64 HRC Rockwell hardness','Tolerance h6 (slip fit) or m6 (light press)','Ground to ±0.001mm diameter tolerance'],
+      'Robotics use cases':['High-cycle gearbox and transmission alignment','Repeatably-disassembled precision joints (100+ cycles)','Tooling plate and fixture locating pins','Cam and follower pivot pins'],
+      'Hardness caution':['60 HRC is harder than most drill bits — use carbide reamers only','Pre-ream holes before any hardening operations if possible','Never cut or grind a hardened pin — it will shatter or destroy tooling'],
+    },
+    finishes:['black-oxide','silver'],
+    load:['shear','locating'],
+    vib:['vibration-immune'],
+    failures:['Attempting to cut or drill a hardened pin in the field — will shatter','Using HSS reamer in hardened steel bore — use carbide only','Press-fitting into aluminum without lubrication — galls bore on first press'],
+  },
+  {
+    id:'setscrew-hardened',
+    title:'Set screw — hardened steel with nylon patch',
+    grade:'ISO 4029 · 45H + nylon patch',
+    types:['set-screw'],
+    substrates:['al-plate','steel'],
+    sizes:['tiny','small','medium'],
+    materials:['hardened'],
+    priorities:['axial-retention','vibration','reuse'],
+    desc:'Standard 45H hardened cup-point set screw with a factory-applied nylon patch on the threads. The patch provides mechanical thread locking without adhesive — reusable up to ~5 times and immune to solvent washout. Preferred over Loctite wherever the joint needs frequent re-adjustment in the field without chemical cleaning.',
+    details:{
+      'Specifications':['ISO 4029 45H base','Nylon patch equivalent to Loctite 243 prevailing torque','Reusable approximately 5 cycles before patch degrades','McMaster stocks most sizes under "nylon-patch set screws"'],
+      'Robotics use cases':['Encoder wheel retention on frequently-adjusted shafts','Motor coupling set screws adjusted during calibration','Any shaft retention repositioned during competition or field tuning'],
+      'vs Loctite 243':['Nylon patch: immediate hold, no cure time, field-removable, 5× reusable, no cleanup','Loctite 243: stronger initial bond, cheaper per fastener, requires 10 min cure, acetone cleanup for re-use'],
+    },
+    finishes:['black-oxide'],
+    load:['axial-retention'],
+    vib:['locking-optional'],
+    failures:['Over-counting reuse cycles — inspect patch threads after each removal, replace when nylon is gone','Using above ~120°C — nylon patch softens and loses prevailing torque at temperature','Confusing nylon-patch with standard set screw in parts bins — label bins clearly'],
+  },
 ];
 
 const FINISH_META = {
@@ -1422,6 +1731,8 @@ const FINISH_META = {
 const MAT_HEX = {
   steel:'#7a8fc8', ss:'#5ab890', ti:'#c87850',
   al:'#8aaac8', brass:'#c8a040', nylon:'#9070c8',
+  ph:'#48a0c8', 'mild-steel':'#989070', peek:'#c8a848',
+  monel:'#40b0a0', hardened:'#b86890',
 };
 
 // ─── Fastener SVG illustrations ──────────────────────────────────────────────
@@ -1517,17 +1828,18 @@ const FASTENER_ILLUS = {
 
 const ILLUS_MAP = {
   'shcs-steel':'shcs','shcs-ss316':'shcs','shcs-ti':'shcs','shcs-al':'shcs',
+  'shcs-ph':'shcs','shcs-mild':'shcs','shcs-peek':'shcs','shcs-monel':'shcs',
   'bhcs-steel':'button','bhcs-ss':'button','bhcs-ti':'button',
   'flat-steel':'flat','flat-ss':'flat',
   'low-profile-steel':'low-profile',
-  'shoulder-steel':'shoulder','shoulder-ss':'shoulder',
-  'dowel-steel':'dowel-solid','dowel-ss':'dowel-solid','dowel-spring':'dowel-spring',
-  'setscrew-cup':'set-cup','setscrew-ss':'set-cup',
+  'shoulder-steel':'shoulder','shoulder-ss':'shoulder','shoulder-ph':'shoulder',
+  'dowel-steel':'dowel-solid','dowel-ss':'dowel-solid','dowel-spring':'dowel-spring','dowel-hardened':'dowel-solid',
+  'setscrew-cup':'set-cup','setscrew-ss':'set-cup','setscrew-ph':'set-cup','setscrew-hardened':'set-cup',
   'setscrew-cone':'set-cone','setscrew-flat':'set-flat',
-  'standoff-al':'standoff','standoff-ss':'standoff',
+  'standoff-al':'standoff','standoff-ss':'standoff','standoff-peek':'standoff',
   'heatset-brass':'heat-set','heatset-steel':'heat-set',
   'selftap-ss':'self-tap','stud-steel':'stud',
-  'machine-nylon':'machine','machine-brass':'machine',
+  'machine-nylon':'machine','machine-brass':'machine','machine-mild':'machine','machine-monel':'machine',
 };
 
 function getFastenerIllus(id, mat) {
