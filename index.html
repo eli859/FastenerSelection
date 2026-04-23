@@ -58,16 +58,18 @@
     --col-nylon-muted: #483060;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 13px; line-height: 1.5; min-height: 100vh; }
+  html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 13px; line-height: 1.5; }
 
-  .shell { display: grid; grid-template-columns: 420px 1fr; grid-template-rows: auto 1fr; min-height: 100vh; }
+  .shell { display: grid; grid-template-columns: 420px 1fr; grid-template-rows: auto 1fr; height: 100vh; overflow: hidden; }
 
-  header { grid-column: 1 / -1; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: baseline; gap: 16px; background: var(--surface); }
+  header { grid-column: 1 / -1; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: baseline; gap: 16px; background: var(--surface); flex-shrink: 0; }
   header h1 { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
   header span { font-family: var(--mono); font-size: 11px; color: var(--text3); }
 
-  .sidebar { border-right: 1px solid var(--border); padding: 16px 0; overflow-y: auto; background: var(--surface); }
-  .filter-section { padding: 0 16px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .sidebar { border-right: 1px solid var(--border); overflow-y: auto; background: var(--surface); display: flex; flex-direction: column; min-height: 0; }
+  .sidebar > .search-bar { flex-shrink: 0; }
+  .sidebar > .sidebar-actions { flex-shrink: 0; }
+  .filter-section { padding: 0 16px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-shrink: 0; }
   .filter-section:last-of-type { border-bottom: none; }
   .filter-label { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
   .tags { display: flex; flex-wrap: wrap; gap: 5px; }
@@ -105,8 +107,8 @@
   .reset-btn { font-family: var(--mono); font-size: 10px; color: var(--text3); background: none; border: none; cursor: pointer; padding: 0; margin-top: 8px; letter-spacing: 0.06em; transition: color 0.12s; }
   .reset-btn:hover { color: var(--danger); }
 
-  .main { display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-  .results-header { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--surface); }
+  .main { display: flex; flex-direction: column; overflow: hidden; min-width: 0; min-height: 0; }
+  .results-header { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--surface); flex-shrink: 0; }
   .results-count { font-family: var(--mono); font-size: 11px; color: var(--text3); white-space: nowrap; }
   .results-count strong { color: var(--accent); font-weight: 500; }
 
@@ -114,8 +116,22 @@
   .active-chip { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 2px; background: var(--tag-active-bg); border: 1px solid var(--tag-active-border); color: var(--accent); }
   .no-filters { font-family: var(--mono); font-size: 11px; color: var(--text3); }
 
-  .cards { padding: 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; align-content: start; }
+  .mat-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 8px 20px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+
+  .cards { flex: 1 1 0; padding: 14px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
   .no-results { padding: 48px; text-align: center; color: var(--text3); font-family: var(--mono); font-size: 12px; }
+
+  /* Bottom tabs — collapsed by default, expandable */
+  .bottom-tabs { flex-shrink: 0; border-top: 1px solid var(--border); display: flex; flex-direction: column; transition: height 0.18s ease; height: 40px; overflow: hidden; }
+  .bottom-tabs.open { height: 260px; }
+  .tab-bar { display: flex; border-bottom: 1px solid var(--border); padding: 0 12px; background: var(--surface); flex-shrink: 0; align-items: center; height: 40px; }
+  .tab-btn { font-family: var(--mono); font-size: 11px; padding: 0 14px; height: 40px; border: none; background: none; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.12s; letter-spacing: 0.06em; text-transform: uppercase; }
+  .tab-btn:hover { color: var(--text2); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-toggle { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--text3); background: none; border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; cursor: pointer; transition: all 0.12s; white-space: nowrap; }
+  .tab-toggle:hover { color: var(--text); border-color: var(--border2); }
+  .tab-panel { display: none; padding: 14px 20px; overflow-y: auto; flex: 1; min-height: 0; }
+  .tab-panel.active { display: block; }
 
   /* Base card */
   .card { border-radius: 7px; padding: 16px 20px; cursor: pointer; transition: border-color 0.12s, background 0.12s; border: 1px solid var(--border); background: var(--surface); position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto auto auto; column-gap: 20px; }
@@ -204,18 +220,13 @@
   .failure-box li::before { content: '!'; position: absolute; left: 0; color: var(--danger); font-size: 10px; font-family: var(--mono); }
 
   /* ── Legend ── */
-  .mat-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 10px 20px; border-bottom: 1px solid var(--border); background: var(--surface); }
   .legend-item { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--text3); }
   .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
 
   /* ── Tabs ── */
-  .bottom-tabs { border-top: 1px solid var(--border); }
-  .tab-bar { display: flex; border-bottom: 1px solid var(--border); padding: 0 20px; background: var(--surface); }
   .tab-btn { font-family: var(--mono); font-size: 11px; padding: 10px 16px; border: none; background: none; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.12s; letter-spacing: 0.06em; text-transform: uppercase; }
   .tab-btn:hover { color: var(--text2); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab-panel { display: none; padding: 20px; }
-  .tab-panel.active { display: block; }
 
   /* ── Torque ── */
   .torque-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin-bottom: 16px; }
@@ -288,9 +299,25 @@
   .add-to-bom-btn:hover { background: #8fba6a1a; border-color: var(--accent2); }
   .add-to-bom-btn.added { border-color: var(--text3); color: var(--text3); background: none; }
 
+  /* ── Card BOM size picker ── */
+  .card-bom-picker { display: flex; align-items: center; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .bom-picker-select { background: var(--surface3); border: 1px solid var(--border2); border-radius: 3px; color: var(--text2); font-family: var(--mono); font-size: 11px; padding: 4px 7px; outline: none; appearance: none; cursor: pointer; transition: border-color 0.12s; min-width: 80px; }
+  .bom-picker-select:focus { border-color: var(--accent); }
+  .bom-picker-qty { background: var(--surface3); border: 1px solid var(--border2); border-radius: 3px; color: var(--text2); font-family: var(--mono); font-size: 11px; padding: 4px 6px; outline: none; width: 48px; text-align: center; transition: border-color 0.12s; }
+  .bom-picker-qty:focus { border-color: var(--accent); }
+  .bom-picker-add { font-family: var(--mono); font-size: 10px; padding: 4px 10px; border-radius: 3px; border: 1px solid #8fba6a55; color: var(--accent2); background: #8fba6a0a; cursor: pointer; transition: all 0.12s; white-space: nowrap; }
+  .bom-picker-add:hover { background: #8fba6a1a; border-color: var(--accent2); }
+  .bom-size-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .bom-size-chip { font-family: var(--mono); font-size: 10px; padding: 2px 6px 2px 8px; border-radius: 3px; background: #8fba6a14; border: 1px solid #8fba6a44; color: var(--accent2); display: inline-flex; align-items: center; gap: 5px; }
+  .bom-size-chip-remove { background: none; border: none; color: #8fba6a88; cursor: pointer; font-size: 11px; padding: 0; line-height: 1; transition: color 0.1s; }
+  .bom-size-chip-remove:hover { color: var(--danger); }
+
   @media (max-width: 900px) {
-    .shell { grid-template-columns: 1fr; }
-    .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+    html, body { overflow: auto; height: auto; }
+    .shell { grid-template-columns: 1fr; height: auto; min-height: 100vh; overflow: visible; }
+    .sidebar { border-right: none; border-bottom: 1px solid var(--border); max-height: 50vh; }
+    .cards { max-height: 50vh; }
+    .bottom-tabs { max-height: none; }
     .checklist-cols { grid-template-columns: 1fr; }
     .card-inner { grid-template-columns: 1fr; }
     .card-right { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 10px; flex-direction: row; align-items: center; justify-content: space-between; }
@@ -471,12 +498,13 @@
   <div class="cards" id="cards"></div>
 
   <!-- Bottom tabs -->
-  <div class="bottom-tabs">
+  <div class="bottom-tabs" id="bottom-tabs">
     <div class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('torque', this)">Torque ref</button>
       <button class="tab-btn" onclick="switchTab('loctite', this)">Thread locking</button>
       <button class="tab-btn" onclick="switchTab('checklist', this)">Documentation</button>
       <button class="tab-btn" onclick="switchTab('bom', this)">BOM <span id="bom-tab-count"></span></button>
+      <button class="tab-toggle" id="tab-toggle" onclick="toggleBottomPanel()">▲ open</button>
     </div>
 
     <!-- Torque panel -->
@@ -1512,8 +1540,23 @@ let expandedId = null;
 const active = { type:null, substrate:null, size:null, material:null, priority:null, finish:null, load:null, vib:null };
 let searchQuery = '';
 
-// BOM state: Map of fastener id → { qty, joint, size }
+// BOM state: Map of "fastener-id:size" → { fastener id, title, grade, size, qty, joint }
 const bom = new Map();
+
+// Sizes available in the size picker
+const SIZE_OPTIONS_METRIC   = ['M2','M2.5','M3','M4','M5','M6','M8','M10','M12','M16'];
+const SIZE_OPTIONS_IMPERIAL = ['#4-40','#6-32','#8-32','#10-32','1/4"-20','5/16"-18','3/8"-16'];
+const SIZE_OPTIONS_PINS     = ['2mm','3mm','4mm','5mm','6mm','8mm','10mm'];
+const SIZE_OPTIONS_INSERTS  = ['M2','M2.5','M3','M4','M5','M6'];
+
+// Which size list to use per fastener type
+function sizesForFastener(f) {
+  const t = f.types[0];
+  if (t === 'dowel-pin') return SIZE_OPTIONS_PINS;
+  if (t === 'heat-set')  return SIZE_OPTIONS_INSERTS;
+  if (t === 'standoff')  return [...SIZE_OPTIONS_METRIC];
+  return [...SIZE_OPTIONS_METRIC, ...SIZE_OPTIONS_IMPERIAL];
+}
 
 function matches(f) {
   if (active.type      && !f.types.includes(active.type))           return false;
@@ -1556,6 +1599,23 @@ function render() {
     const dotColor = MAT_COLORS[primaryMat] || 'var(--text3)';
     const mmUrl = MM_URLS[f.id] || 'https://www.mcmaster.com/screws/';
     const illus = getFastenerIllus(f.id, primaryMat);
+
+    // Which BOM entries belong to this fastener?
+    const myBomKeys = [...bom.keys()].filter(k => k.startsWith(f.id + ':'));
+    const sizeChips = myBomKeys.map(k => {
+      const row = bom.get(k);
+      return `<span class="bom-size-chip">${row.size} ×${row.qty}<button class="bom-size-chip-remove" onclick="event.stopPropagation();removeBOMEntry('${k}')" title="Remove">✕</button></span>`;
+    }).join('');
+
+    const sizeOpts = sizesForFastener(f).map(s=>`<option value="${s}">${s}</option>`).join('');
+    const picker = `
+      <div class="card-bom-picker" onclick="event.stopPropagation()">
+        <select class="bom-picker-select" id="bom-sel-${f.id}">${sizeOpts}</select>
+        <input class="bom-picker-qty" id="bom-qty-${f.id}" type="number" min="1" value="1">
+        <button class="bom-picker-add" onclick="addToBOMFromCard('${f.id}')">+ BOM</button>
+      </div>
+      ${myBomKeys.length ? `<div class="bom-size-chips" onclick="event.stopPropagation()">${sizeChips}</div>` : ''}`;
+
     const detailHtml = Object.entries(f.details).map(([title,items])=>`
       <div class="detail-group">
         <h4>${title}</h4>
@@ -1580,6 +1640,7 @@ function render() {
           <div class="card-icon">${illus}</div>
           <div class="card-left">
             <div class="card-desc">${f.desc}</div>
+            ${picker}
           </div>
           <div class="card-right">
             <div class="card-pills">
@@ -1593,7 +1654,6 @@ function render() {
             </div>
             <div class="card-footer">
               <a class="mcmaster-btn" href="${mmUrl}" target="_blank" onclick="event.stopPropagation()">McMaster</a>
-              <button class="add-to-bom-btn${bom.has(f.id)?' added':''}" onclick="event.stopPropagation();addToBOM('${f.id}')">${bom.has(f.id)?'✓ in BOM':'+ add to BOM'}</button>
               <div class="expand-hint">${isExp?'▲ collapse':'▼ expand'}</div>
             </div>
           </div>
@@ -1603,10 +1663,7 @@ function render() {
           ${failureHtml}
           <div class="card-footer-expanded">
             <div class="expand-hint" style="color:var(--text2)">▲ collapse</div>
-            <div style="display:flex;gap:8px;align-items:center">
-              <button class="add-to-bom-btn${bom.has(f.id)?' added':''}" onclick="event.stopPropagation();addToBOM('${f.id}')">${bom.has(f.id)?'✓ in BOM':'+ add to BOM'}</button>
-              <a class="mcmaster-btn" href="${mmUrl}" target="_blank" onclick="event.stopPropagation()">↗ McMaster</a>
-            </div>
+            <a class="mcmaster-btn" href="${mmUrl}" target="_blank" onclick="event.stopPropagation()">↗ McMaster</a>
           </div>
         </div>
       </div>`;
@@ -1615,6 +1672,8 @@ function render() {
 
 function handleCardClick(e, id) {
   if (e.target.closest('.mcmaster-btn')) return;
+  if (e.target.closest('.card-bom-picker')) return;
+  if (e.target.closest('.bom-size-chips')) return;
   expandedId = expandedId === id ? null : id;
   render();
 }
@@ -1655,22 +1714,36 @@ function clearSearch() {
 }
 
 // ─── BOM ─────────────────────────────────────────────────────────────────────
-function addToBOM(id) {
-  if (bom.has(id)) { bom.delete(id); }
-  else {
-    const f = FASTENERS.find(x=>x.id===id);
-    bom.set(id, { title: f.title, grade: f.grade, qty: 1, joint: '', size: '' });
+function addToBOMFromCard(id) {
+  const selEl = document.getElementById('bom-sel-' + id);
+  const qtyEl = document.getElementById('bom-qty-' + id);
+  if (!selEl) return;
+  const size = selEl.value;
+  const qty  = Math.max(1, parseInt(qtyEl?.value) || 1);
+  const key  = id + ':' + size;
+  const f    = FASTENERS.find(x => x.id === id);
+  if (bom.has(key)) {
+    // increment qty if already present
+    bom.get(key).qty += qty;
+  } else {
+    bom.set(key, { fastId: id, title: f.title, grade: f.grade, size, qty, joint: '' });
   }
   renderBOM();
-  render(); // refresh card buttons
+  render();
+}
+
+function removeBOMEntry(key) {
+  bom.delete(key);
+  renderBOM();
+  render();
 }
 
 function renderBOM() {
-  const empty = document.getElementById('bom-empty');
+  const empty   = document.getElementById('bom-empty');
   const content = document.getElementById('bom-content');
-  const rows = document.getElementById('bom-rows');
+  const rows    = document.getElementById('bom-rows');
   const tabCount = document.getElementById('bom-tab-count');
-  const total = document.getElementById('bom-total');
+  const total   = document.getElementById('bom-total');
 
   const count = bom.size;
   tabCount.textContent = count > 0 ? `(${count})` : '';
@@ -1683,33 +1756,31 @@ function renderBOM() {
   empty.style.display = 'none';
   content.style.display = '';
 
-  const totalQty = [...bom.values()].reduce((s,r)=>s+(parseInt(r.qty)||0),0);
-  total.textContent = `${count} line${count!==1?'s':''} · ${totalQty} total pcs`;
+  const totalQty = [...bom.values()].reduce((s, r) => s + (parseInt(r.qty) || 0), 0);
+  total.textContent = `${count} line${count !== 1 ? 's' : ''} · ${totalQty} total pcs`;
 
-  rows.innerHTML = [...bom.entries()].map(([id,row])=>`
+  rows.innerHTML = [...bom.entries()].map(([key, row]) => `
     <div class="bom-row">
       <div>
         <div class="bom-row-name">${row.title}</div>
         <div class="bom-row-sub">${row.grade}</div>
       </div>
       <input class="bom-input" type="number" min="1" value="${row.qty}"
-        onchange="updateBOM('${id}','qty',this.value)" style="text-align:center">
+        onchange="updateBOM('${key}','qty',this.value)" style="text-align:center">
       <input class="bom-input" type="text" placeholder="e.g. motor mount"
-        value="${row.joint}" oninput="updateBOM('${id}','joint',this.value)">
-      <input class="bom-input" type="text" placeholder="e.g. M4×12"
-        value="${row.size}" oninput="updateBOM('${id}','size',this.value)">
-      <button class="bom-remove" onclick="addToBOM('${id}')" title="Remove">✕</button>
+        value="${row.joint}" oninput="updateBOM('${key}','joint',this.value)">
+      <div class="bom-input" style="cursor:default;color:var(--accent2)">${row.size}</div>
+      <button class="bom-remove" onclick="removeBOMEntry('${key}')" title="Remove">✕</button>
     </div>`).join('');
 }
 
-function updateBOM(id, field, value) {
-  if (bom.has(id)) {
-    bom.get(id)[field] = field==='qty' ? Math.max(1, parseInt(value)||1) : value;
-    // re-render just the total count without blowing away focused input
-    const count = bom.size;
-    const totalQty = [...bom.values()].reduce((s,r)=>s+(parseInt(r.qty)||0),0);
+function updateBOM(key, field, value) {
+  if (bom.has(key)) {
+    bom.get(key)[field] = field === 'qty' ? Math.max(1, parseInt(value) || 1) : value;
+    const count    = bom.size;
+    const totalQty = [...bom.values()].reduce((s, r) => s + (parseInt(r.qty) || 0), 0);
     document.getElementById('bom-total').textContent =
-      `${count} line${count!==1?'s':''} · ${totalQty} total pcs`;
+      `${count} line${count !== 1 ? 's' : ''} · ${totalQty} total pcs`;
     document.getElementById('bom-tab-count').textContent = count > 0 ? `(${count})` : '';
   }
 }
@@ -1720,13 +1791,13 @@ function clearBOM() {
 
 function exportBOM() {
   if (!bom.size) return;
-  const header = 'Fastener,Grade,Qty,Joint / Location,Size\n';
+  const header = 'Fastener,Grade,Size,Qty,Joint / Location\n';
   const rows = [...bom.values()].map(r =>
-    [r.title, r.grade, r.qty, r.joint, r.size]
-      .map(v => `"${String(v).replace(/"/g,'""')}"`)
+    [r.title, r.grade, r.size, r.qty, r.joint]
+      .map(v => `"${String(v).replace(/"/g, '""')}"`)
       .join(',')
   ).join('\n');
-  const blob = new Blob([header+rows], {type:'text/csv'});
+  const blob = new Blob([header + rows], { type: 'text/csv' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'fastener-bom.csv';
@@ -1735,11 +1806,24 @@ function exportBOM() {
 }
 
 // ─── Tabs ───────────────────────────────────────────────────────────────────
+function toggleBottomPanel() {
+  const el = document.getElementById('bottom-tabs');
+  const btn = document.getElementById('tab-toggle');
+  const isOpen = el.classList.toggle('open');
+  btn.textContent = isOpen ? '▼ close' : '▲ open';
+}
+
 function switchTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
   btn.classList.add('active');
+  // auto-open the panel if it's collapsed
+  const el = document.getElementById('bottom-tabs');
+  if (!el.classList.contains('open')) {
+    el.classList.add('open');
+    document.getElementById('tab-toggle').textContent = '▼ close';
+  }
 }
 
 // ─── Torque calculator ──────────────────────────────────────────────────────
