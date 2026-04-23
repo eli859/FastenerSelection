@@ -161,11 +161,13 @@
   .card-grade { font-family: var(--mono); font-size: 10px; color: var(--text3); background: var(--surface3); border: 1px solid var(--border2); border-radius: 3px; padding: 2px 8px; white-space: nowrap; flex-shrink: 0; }
 
   /* Two-column card body: description left, metadata right */
-  .card-inner { display: grid; grid-template-columns: 1fr 220px; gap: 0 24px; }
-  .card.expanded .card-inner { grid-template-columns: 1fr; }
+  .card-inner { display: grid; grid-template-columns: 72px 1fr 220px; gap: 0 20px; align-items: start; }
+  .card.expanded .card-inner { grid-template-columns: 72px 1fr; }
+  .card.expanded .card-right { display: none; }
+  .card-icon { width: 72px; display: flex; align-items: center; justify-content: center; opacity: 0.85; }
+  .card-icon svg { width: 56px; height: auto; display: block; }
   .card-left { min-width: 0; }
   .card-right { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; border-left: 1px solid var(--border); padding-left: 20px; }
-  .card.expanded .card-right { border-left: none; padding-left: 0; flex-direction: row; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border); }
 
   .card-pills { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
   .pill { font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 2px; border: 1px solid var(--border); color: var(--text3); }
@@ -181,6 +183,7 @@
   .card-desc { font-size: 12px; color: var(--text2); line-height: 1.75; }
 
   .card-footer { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: auto; }
+  .card-footer-expanded { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
   .expand-hint { font-family: var(--mono); font-size: 10px; color: var(--text3); white-space: nowrap; }
   .mcmaster-btn { font-family: var(--mono); font-size: 10px; padding: 4px 12px; border-radius: 3px; border: 1px solid var(--border2); background: var(--surface3); color: var(--text2); cursor: pointer; text-decoration: none; transition: all 0.12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
   .mcmaster-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--tag-active-bg); }
@@ -249,7 +252,41 @@
   .progress-fill { height: 100%; background: var(--accent2); border-radius: 1px; transition: width 0.3s ease; }
   .progress-label { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 6px; }
 
-  .section-title { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+  /* ── Search bar ── */
+  .search-bar { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .search-input-wrap { position: relative; }
+  .search-input { width: 100%; background: var(--surface3); border: 1px solid var(--border2); border-radius: 4px; color: var(--text); font-family: var(--mono); font-size: 12px; padding: 8px 32px 8px 10px; outline: none; transition: border-color 0.12s; }
+  .search-input::placeholder { color: var(--text3); }
+  .search-input:focus { border-color: var(--accent); }
+  .search-clear { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text3); cursor: pointer; font-size: 13px; line-height: 1; padding: 2px; display: none; }
+  .search-clear.visible { display: block; }
+  .search-clear:hover { color: var(--danger); }
+
+  /* ── Sidebar top actions ── */
+  .sidebar-actions { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px 4px; }
+  .sidebar-actions-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ── BOM builder ── */
+  .bom-empty { padding: 32px 20px; text-align: center; font-family: var(--mono); font-size: 11px; color: var(--text3); line-height: 1.8; }
+  .bom-row { display: grid; grid-template-columns: 1fr 80px 100px 80px auto; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .bom-row:last-of-type { border-bottom: none; }
+  .bom-row-name { font-size: 12px; color: var(--text); }
+  .bom-row-sub  { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 2px; }
+  .bom-input { background: var(--surface3); border: 1px solid var(--border); border-radius: 3px; color: var(--text); font-family: var(--mono); font-size: 11px; padding: 4px 7px; width: 100%; outline: none; }
+  .bom-input:focus { border-color: var(--accent); }
+  .bom-remove { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 14px; padding: 0 4px; transition: color 0.1s; }
+  .bom-remove:hover { color: var(--danger); }
+  .bom-header { display: grid; grid-template-columns: 1fr 80px 100px 80px auto; gap: 8px; padding: 0 0 8px; border-bottom: 1px solid var(--border2); margin-bottom: 4px; }
+  .bom-col-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .bom-actions { display: flex; gap: 10px; margin-top: 16px; align-items: center; flex-wrap: wrap; }
+  .bom-btn { font-family: var(--mono); font-size: 11px; padding: 6px 14px; border-radius: 3px; border: 1px solid var(--border2); background: var(--surface3); color: var(--text2); cursor: pointer; transition: all 0.12s; }
+  .bom-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .bom-btn.primary { border-color: var(--accent2); color: var(--accent2); }
+  .bom-btn.primary:hover { background: #8fba6a18; }
+  .bom-count { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-left: auto; }
+  .add-to-bom-btn { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border-radius: 3px; border: 1px solid #8fba6a44; color: var(--accent2); background: #8fba6a0a; cursor: pointer; text-decoration: none; transition: all 0.12s; white-space: nowrap; }
+  .add-to-bom-btn:hover { background: #8fba6a1a; border-color: var(--accent2); }
+  .add-to-bom-btn.added { border-color: var(--text3); color: var(--text3); background: none; }
 
   @media (max-width: 900px) {
     .shell { grid-template-columns: 1fr; }
@@ -270,6 +307,18 @@
 
 <!-- Sidebar -->
 <aside class="sidebar">
+
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <input class="search-input" id="search-input" type="text" placeholder="Search fasteners… e.g. shoulder, 316, set screw" oninput="onSearch(this.value)">
+      <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+    </div>
+  </div>
+
+  <div class="sidebar-actions">
+    <span class="sidebar-actions-label">Filters</span>
+    <button class="reset-btn" onclick="resetAll()">✕ clear all</button>
+  </div>
 
   <div class="filter-section">
     <div class="filter-label">Fastener type</div>
@@ -395,9 +444,7 @@
     </div>
   </div>
 
-  <div style="padding: 0 16px;">
-    <button class="reset-btn" onclick="resetAll()">✕ clear all filters</button>
-  </div>
+
 
 </aside>
 
@@ -429,6 +476,7 @@
       <button class="tab-btn active" onclick="switchTab('torque', this)">Torque ref</button>
       <button class="tab-btn" onclick="switchTab('loctite', this)">Thread locking</button>
       <button class="tab-btn" onclick="switchTab('checklist', this)">Documentation</button>
+      <button class="tab-btn" onclick="switchTab('bom', this)">BOM <span id="bom-tab-count"></span></button>
     </div>
 
     <!-- Torque panel -->
@@ -670,6 +718,26 @@
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
       <div class="progress-label" id="progress-label">0 of 18 items complete</div>
+    </div>
+
+    <!-- BOM panel -->
+    <div class="tab-panel" id="tab-bom">
+      <div id="bom-empty" class="bom-empty">No fasteners added yet.<br>Click <span style="color:var(--accent2)">+ add to BOM</span> on any card to start building your list.</div>
+      <div id="bom-content" style="display:none">
+        <div class="bom-header">
+          <div class="bom-col-label">Fastener</div>
+          <div class="bom-col-label">Qty</div>
+          <div class="bom-col-label">Joint / location</div>
+          <div class="bom-col-label">Size</div>
+          <div></div>
+        </div>
+        <div id="bom-rows"></div>
+        <div class="bom-actions">
+          <button class="bom-btn primary" onclick="exportBOM()">↓ export CSV</button>
+          <button class="bom-btn" onclick="clearBOM()">clear BOM</button>
+          <span class="bom-count" id="bom-total"></span>
+        </div>
+      </div>
     </div>
 
   </div><!-- /bottom-tabs -->
@@ -1322,9 +1390,130 @@ const FINISH_META = {
   'ptfe-coat':   { color:'#e0d8c8', label:'PTFE / Xylan' },
 };
 
+// ─── Material hex colors (for SVG — CSS vars can't be used in SVG attrs) ───
+const MAT_HEX = {
+  steel:'#7a8fc8', ss:'#5ab890', ti:'#c87850',
+  al:'#8aaac8', brass:'#c8a040', nylon:'#9070c8',
+};
 
-const active = { type:null, substrate:null, size:null, material:null, priority:null, finish:null, load:null, vib:null };
+// ─── Fastener SVG illustrations ──────────────────────────────────────────────
+const _T = (cx,r,y1,y2,c) => {
+  let s = '';
+  for (let y=y1; y<=y2; y+=5) {
+    s += `<line x1="${cx-r-2}" y1="${y}" x2="${cx-r+.5}" y2="${y}" stroke="${c}" stroke-opacity=".45" stroke-width=".8"/>`;
+    s += `<line x1="${cx+r-.5}" y1="${y}" x2="${cx+r+2}" y2="${y}" stroke="${c}" stroke-opacity=".45" stroke-width=".8"/>`;
+  }
+  return s;
+};
+const _S = (c,inner) => `<svg viewBox="0 0 56 90" fill="none" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+
+const FASTENER_ILLUS = {
+  shcs: c => _S(c,`
+    <rect x="11" y="4" width="34" height="17" rx="2" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>
+    <polygon points="28,7 32,9.5 32,13.5 28,16 24,13.5 24,9.5" fill="#16161c" stroke="${c}" stroke-opacity=".5" stroke-width=".8"/>
+    <rect x="22" y="21" width="12" height="65" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,25,85,c)}`),
+  button: c => _S(c,`
+    <rect x="7" y="4" width="42" height="13" rx="6.5" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>
+    <rect x="22" y="17" width="12" height="69" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,21,85,c)}`),
+  flat: c => _S(c,`
+    <polygon points="6,4 50,4 34,17 22,17" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-opacity=".7" stroke-width="1" stroke-linejoin="round"/>
+    <rect x="22" y="17" width="12" height="69" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,21,85,c)}`),
+  'low-profile': c => _S(c,`
+    <rect x="11" y="4" width="34" height="11" rx="2" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>
+    <polygon points="28,6.5 31.5,8.5 31.5,11 28,13 24.5,11 24.5,8.5" fill="#16161c" stroke="${c}" stroke-opacity=".45" stroke-width=".7"/>
+    <rect x="22" y="15" width="12" height="71" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,19,85,c)}`),
+  shoulder: c => _S(c,`
+    <rect x="11" y="4" width="34" height="14" rx="2" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>
+    <polygon points="28,7 32,9 32,12.5 28,14.5 24,12.5 24,9" fill="#16161c" stroke="${c}" stroke-opacity=".5" stroke-width=".8"/>
+    <rect x="19" y="18" width="18" height="34" rx="1" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>
+    <line x1="19" y1="27" x2="37" y2="27" stroke="${c}" stroke-opacity=".15" stroke-width=".6"/>
+    <line x1="19" y1="36" x2="37" y2="36" stroke="${c}" stroke-opacity=".15" stroke-width=".6"/>
+    <line x1="19" y1="44" x2="37" y2="44" stroke="${c}" stroke-opacity=".15" stroke-width=".6"/>
+    <rect x="22" y="52" width="12" height="34" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,55,85,c)}`),
+  'dowel-solid': c => _S(c,`
+    <rect x="20" y="6" width="16" height="78" rx="3" fill="${c}" fill-opacity=".15" stroke="${c}" stroke-opacity=".75" stroke-width="1"/>
+    <line x1="20" y1="12" x2="24" y2="7" stroke="${c}" stroke-opacity=".5" stroke-width=".8"/>
+    <line x1="36" y1="12" x2="32" y2="7" stroke="${c}" stroke-opacity=".5" stroke-width=".8"/>
+    <line x1="20" y1="78" x2="24" y2="83" stroke="${c}" stroke-opacity=".5" stroke-width=".8"/>
+    <line x1="36" y1="78" x2="32" y2="83" stroke="${c}" stroke-opacity=".5" stroke-width=".8"/>
+    <line x1="28" y1="6" x2="28" y2="84" stroke="${c}" stroke-opacity=".07" stroke-width=".6"/>`),
+  'dowel-spring': c => _S(c,`
+    <rect x="20" y="6" width="16" height="78" rx="2" fill="${c}" fill-opacity=".15" stroke="${c}" stroke-opacity=".75" stroke-width="1"/>
+    <rect x="23" y="6" width="10" height="78" fill="#16161c" fill-opacity=".75" stroke="none"/>
+    <line x1="28" y1="6" x2="28" y2="84" stroke="${c}" stroke-opacity=".7" stroke-width="1" stroke-dasharray="3 3"/>`),
+  'set-cup': c => _S(c,`
+    <rect x="22" y="4" width="12" height="72" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,7,75,c)}
+    <path d="M22,76 Q25,83 28,84 Q31,83 34,76" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>`),
+  'set-cone': c => _S(c,`
+    <rect x="22" y="4" width="12" height="68" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,7,71,c)}
+    <polygon points="22,72 34,72 28,85" fill="${c}" fill-opacity=".25" stroke="${c}" stroke-opacity=".75" stroke-width="1" stroke-linejoin="round"/>`),
+  'set-flat': c => _S(c,`
+    <rect x="22" y="4" width="12" height="82" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,7,85,c)}`),
+  standoff: c => _S(c,`
+    <rect x="22" y="4" width="12" height="14" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".6" stroke-width="1"/>
+    ${_T(28,6,7,17,c)}
+    <polygon points="12,18 44,18 48,22 48,68 44,72 12,72 8,68 8,22" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-opacity=".75" stroke-width="1"/>
+    <line x1="8" y1="32" x2="48" y2="32" stroke="${c}" stroke-opacity=".1" stroke-width=".6"/>
+    <line x1="8" y1="45" x2="48" y2="45" stroke="${c}" stroke-opacity=".1" stroke-width=".6"/>
+    <line x1="8" y1="58" x2="48" y2="58" stroke="${c}" stroke-opacity=".1" stroke-width=".6"/>
+    <rect x="22" y="72" width="12" height="14" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".6" stroke-width="1"/>
+    ${_T(28,6,75,85,c)}`),
+  'heat-set': c => _S(c,`
+    <rect x="16" y="5" width="24" height="80" rx="2" fill="${c}" fill-opacity=".15" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>
+    <rect x="22" y="5" width="12" height="80" fill="#16161c" fill-opacity=".8"/>
+    ${[12,20,28,36,44,52,60,68,76].map(y=>`<line x1="16" y1="${y}" x2="16" y2="${y+6}" stroke="${c}" stroke-opacity=".9" stroke-width="1.5"/><line x1="40" y1="${y}" x2="40" y2="${y+6}" stroke="${c}" stroke-opacity=".9" stroke-width="1.5"/>`).join('')}`),
+  'self-tap': c => _S(c,`
+    <rect x="8" y="4" width="40" height="12" rx="6" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>
+    <line x1="28" y1="5" x2="28" y2="15" stroke="${c}" stroke-opacity=".4" stroke-width="1.2"/>
+    <rect x="22" y="16" width="12" height="56" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    <polygon points="22,72 34,72 28,86" fill="${c}" fill-opacity=".25" stroke="${c}" stroke-opacity=".75" stroke-width="1" stroke-linejoin="round"/>
+    ${_T(28,6,19,71,c)}`),
+  stud: c => _S(c,`
+    <rect x="22" y="4" width="12" height="82" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,7,85,c)}
+    <line x1="18" y1="45" x2="38" y2="45" stroke="${c}" stroke-opacity=".3" stroke-width=".8" stroke-dasharray="2 2"/>`),
+  machine: c => _S(c,`
+    <rect x="9" y="4" width="38" height="12" rx="5.5" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-opacity=".7" stroke-width="1"/>
+    <line x1="28" y1="5" x2="28" y2="15" stroke="${c}" stroke-opacity=".5" stroke-width="1.5"/>
+    <rect x="22" y="16" width="12" height="70" rx="1" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-opacity=".65" stroke-width="1"/>
+    ${_T(28,6,19,85,c)}`),
+};
+
+const ILLUS_MAP = {
+  'shcs-steel':'shcs','shcs-ss316':'shcs','shcs-ti':'shcs','shcs-al':'shcs',
+  'bhcs-steel':'button','bhcs-ss':'button','bhcs-ti':'button',
+  'flat-steel':'flat','flat-ss':'flat',
+  'low-profile-steel':'low-profile',
+  'shoulder-steel':'shoulder','shoulder-ss':'shoulder',
+  'dowel-steel':'dowel-solid','dowel-ss':'dowel-solid','dowel-spring':'dowel-spring',
+  'setscrew-cup':'set-cup','setscrew-ss':'set-cup',
+  'setscrew-cone':'set-cone','setscrew-flat':'set-flat',
+  'standoff-al':'standoff','standoff-ss':'standoff',
+  'heatset-brass':'heat-set','heatset-steel':'heat-set',
+  'selftap-ss':'self-tap','stud-steel':'stud',
+  'machine-nylon':'machine','machine-brass':'machine',
+};
+
+function getFastenerIllus(id, mat) {
+  const key = ILLUS_MAP[id];
+  const fn = FASTENER_ILLUS[key];
+  return fn ? fn(MAT_HEX[mat] || '#808090') : '';
+}
+
 let expandedId = null;
+const active = { type:null, substrate:null, size:null, material:null, priority:null, finish:null, load:null, vib:null };
+let searchQuery = '';
+
+// BOM state: Map of fastener id → { qty, joint, size }
+const bom = new Map();
 
 function matches(f) {
   if (active.type      && !f.types.includes(active.type))           return false;
@@ -1335,6 +1524,13 @@ function matches(f) {
   if (active.finish    && !(f.finishes||[]).includes(active.finish)) return false;
   if (active.load      && !(f.load||[]).includes(active.load))       return false;
   if (active.vib       && !(f.vib||[]).includes(active.vib))         return false;
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    const haystack = [f.title, f.grade, f.desc, ...f.types, ...f.materials,
+      ...(f.finishes||[]), ...(f.load||[]), ...(f.vib||[]), ...f.priorities,
+      ...Object.values(f.details).flat()].join(' ').toLowerCase();
+    if (!haystack.includes(q)) return false;
+  }
   return true;
 }
 
@@ -1359,6 +1555,7 @@ function render() {
     const primaryMat = f.materials[0];
     const dotColor = MAT_COLORS[primaryMat] || 'var(--text3)';
     const mmUrl = MM_URLS[f.id] || 'https://www.mcmaster.com/screws/';
+    const illus = getFastenerIllus(f.id, primaryMat);
     const detailHtml = Object.entries(f.details).map(([title,items])=>`
       <div class="detail-group">
         <h4>${title}</h4>
@@ -1380,6 +1577,7 @@ function render() {
           <div class="card-grade">${f.grade}</div>
         </div>
         <div class="card-inner">
+          <div class="card-icon">${illus}</div>
           <div class="card-left">
             <div class="card-desc">${f.desc}</div>
           </div>
@@ -1395,6 +1593,7 @@ function render() {
             </div>
             <div class="card-footer">
               <a class="mcmaster-btn" href="${mmUrl}" target="_blank" onclick="event.stopPropagation()">McMaster</a>
+              <button class="add-to-bom-btn${bom.has(f.id)?' added':''}" onclick="event.stopPropagation();addToBOM('${f.id}')">${bom.has(f.id)?'✓ in BOM':'+ add to BOM'}</button>
               <div class="expand-hint">${isExp?'▲ collapse':'▼ expand'}</div>
             </div>
           </div>
@@ -1402,6 +1601,13 @@ function render() {
         <div class="card-details">
           ${detailHtml}
           ${failureHtml}
+          <div class="card-footer-expanded">
+            <div class="expand-hint" style="color:var(--text2)">▲ collapse</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="add-to-bom-btn${bom.has(f.id)?' added':''}" onclick="event.stopPropagation();addToBOM('${f.id}')">${bom.has(f.id)?'✓ in BOM':'+ add to BOM'}</button>
+              <a class="mcmaster-btn" href="${mmUrl}" target="_blank" onclick="event.stopPropagation()">↗ McMaster</a>
+            </div>
+          </div>
         </div>
       </div>`;
   }).join('');
@@ -1430,7 +1636,102 @@ document.querySelectorAll('.tag').forEach(tag => {
 function resetAll() {
   Object.keys(active).forEach(k=>active[k]=null);
   document.querySelectorAll('.tag').forEach(t=>t.classList.remove('active'));
+  searchQuery = '';
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-clear').classList.remove('visible');
   expandedId = null; render();
+}
+
+// ─── Search ──────────────────────────────────────────────────────────────────
+function onSearch(val) {
+  searchQuery = val.trim();
+  document.getElementById('search-clear').classList.toggle('visible', !!searchQuery);
+  expandedId = null; render();
+}
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  onSearch('');
+  document.getElementById('search-input').focus();
+}
+
+// ─── BOM ─────────────────────────────────────────────────────────────────────
+function addToBOM(id) {
+  if (bom.has(id)) { bom.delete(id); }
+  else {
+    const f = FASTENERS.find(x=>x.id===id);
+    bom.set(id, { title: f.title, grade: f.grade, qty: 1, joint: '', size: '' });
+  }
+  renderBOM();
+  render(); // refresh card buttons
+}
+
+function renderBOM() {
+  const empty = document.getElementById('bom-empty');
+  const content = document.getElementById('bom-content');
+  const rows = document.getElementById('bom-rows');
+  const tabCount = document.getElementById('bom-tab-count');
+  const total = document.getElementById('bom-total');
+
+  const count = bom.size;
+  tabCount.textContent = count > 0 ? `(${count})` : '';
+
+  if (count === 0) {
+    empty.style.display = '';
+    content.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  content.style.display = '';
+
+  const totalQty = [...bom.values()].reduce((s,r)=>s+(parseInt(r.qty)||0),0);
+  total.textContent = `${count} line${count!==1?'s':''} · ${totalQty} total pcs`;
+
+  rows.innerHTML = [...bom.entries()].map(([id,row])=>`
+    <div class="bom-row">
+      <div>
+        <div class="bom-row-name">${row.title}</div>
+        <div class="bom-row-sub">${row.grade}</div>
+      </div>
+      <input class="bom-input" type="number" min="1" value="${row.qty}"
+        onchange="updateBOM('${id}','qty',this.value)" style="text-align:center">
+      <input class="bom-input" type="text" placeholder="e.g. motor mount"
+        value="${row.joint}" oninput="updateBOM('${id}','joint',this.value)">
+      <input class="bom-input" type="text" placeholder="e.g. M4×12"
+        value="${row.size}" oninput="updateBOM('${id}','size',this.value)">
+      <button class="bom-remove" onclick="addToBOM('${id}')" title="Remove">✕</button>
+    </div>`).join('');
+}
+
+function updateBOM(id, field, value) {
+  if (bom.has(id)) {
+    bom.get(id)[field] = field==='qty' ? Math.max(1, parseInt(value)||1) : value;
+    // re-render just the total count without blowing away focused input
+    const count = bom.size;
+    const totalQty = [...bom.values()].reduce((s,r)=>s+(parseInt(r.qty)||0),0);
+    document.getElementById('bom-total').textContent =
+      `${count} line${count!==1?'s':''} · ${totalQty} total pcs`;
+    document.getElementById('bom-tab-count').textContent = count > 0 ? `(${count})` : '';
+  }
+}
+
+function clearBOM() {
+  bom.clear(); renderBOM(); render();
+}
+
+function exportBOM() {
+  if (!bom.size) return;
+  const header = 'Fastener,Grade,Qty,Joint / Location,Size\n';
+  const rows = [...bom.values()].map(r =>
+    [r.title, r.grade, r.qty, r.joint, r.size]
+      .map(v => `"${String(v).replace(/"/g,'""')}"`)
+      .join(',')
+  ).join('\n');
+  const blob = new Blob([header+rows], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fastener-bom.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 // ─── Tabs ───────────────────────────────────────────────────────────────────
@@ -1494,6 +1795,7 @@ function updateProgress() {
 }
 
 render();
+renderBOM();
 </script>
 </body>
 </html>
